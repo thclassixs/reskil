@@ -2,31 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 8px;
+}
+
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-  }
-
-  /* RTL Support */
-  [dir="rtl"] {
-    direction: rtl;
-  }
-
-  [dir="rtl"] .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-x-reverse: 1;
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 
   /* Smooth scrolling */
   html {
     scroll-behavior: smooth;
   }
+
+  /* Ensure consistent button styling */
+  button {
+    @apply rounded-lg;
+  }
+
+  /* RTL text alignment only - keep layout LTR */
+  .rtl-text {
+    text-align: right;
+  }
+
+  .ltr-text {
+    text-align: left;
+  }
 }
 
 @layer components {
   .container {
-    @apply max-w-7xl mx-auto;
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Consistent button styles */
+  .btn-base {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn-base bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:bg-blue-800;
+  }
+
+  .btn-secondary {
+    @apply btn-base bg-gray-100 text-gray-900 hover:bg-gray-200 hover:shadow-md;
+  }
+
+  .btn-outline {
+    @apply btn-base border border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 text-gray-700 hover:shadow-md;
+  }
+
+  /* Mobile responsive fixes */
+  @media (max-width: 640px) {
+    .container {
+      @apply px-4;
+    }
   }
 }

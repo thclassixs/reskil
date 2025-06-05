@@ -1,102 +1,149 @@
+// Updated course videos with the new content
+
 interface CourseVideo {
-  url: string
-  locked: boolean
   title: string
+  url: string
   description?: string
+  locked: boolean
 }
 
-const courseVideosData: Record<string, CourseVideo[]> = {
+interface CourseVideos {
+  [courseId: string]: CourseVideo[]
+}
+
+// Mock video data with the updated content
+const courseVideos: CourseVideos = {
   "shopify-starter": [
     {
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      locked: false,
       title: "Shopify Starter Plan Review: Is It the Perfect Choice for Beginners?",
-      description: "Complete review of Shopify's starter plan and its features for new entrepreneurs",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Preview video
+      description: "Complete review of Shopify's starter plan and its features",
+      locked: false,
     },
     {
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      locked: true,
       title: "Shopify Tutorial For Beginners 2024: The EASY Way To Set Up Your Store FAST",
-      description: "Step-by-step tutorial on setting up your first Shopify store quickly and efficiently",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      description: "Step-by-step tutorial for setting up your first Shopify store",
+      locked: true,
     },
     {
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      locked: true,
       title: "How to build a Shopify store",
-      description: "Comprehensive guide to building a professional Shopify store from scratch",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      description: "Complete guide to building a professional Shopify store",
+      locked: true,
     },
   ],
   "tiktok-ads-mini": [
     {
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      locked: false,
       title: "This is how i make $30,000 as a tik tok clipper from my couch",
-      description: "Learn the secrets of making money as a TikTok content creator",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Preview video
+      description: "Learn how to make money as a TikTok content creator",
+      locked: false,
     },
     {
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      locked: true,
       title: "TikTok Ads Review: How to Get More Sales with Low-Cost Video Campaigns",
-      description: "Strategies for creating effective TikTok ad campaigns on a budget",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      description: "Comprehensive review of TikTok advertising strategies",
+      locked: true,
     },
     {
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      locked: true,
       title: "How I use AI to Create Facebook/TikTok Ads 😱🤖",
-      description: "Using AI tools to automate and optimize your social media advertising",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      description: "AI-powered ad creation techniques for social media",
+      locked: true,
     },
   ],
   "intro-ai-prompting": [
     {
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      locked: false,
       title: "Create an Entire Video with ChatGPT? #invideoAiPartner",
-      description: "Learn how to use ChatGPT to create complete video content",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Preview video
+      description: "Learn how to create videos using AI tools",
+      locked: false,
     },
     {
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      locked: true,
       title: "Master the Perfect ChatGPT Prompt Formula (in just 8 minutes)!",
-      description: "Quick guide to crafting effective prompts for ChatGPT",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      description: "The ultimate guide to crafting effective AI prompts",
+      locked: true,
     },
     {
-      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      locked: true,
       title: "What is Prompt Engineering? (in about a minute)",
-      description: "Brief introduction to the fundamentals of prompt engineering",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      description: "Quick introduction to prompt engineering concepts",
+      locked: true,
+    },
+  ],
+  "shopify-store-mastery": [
+    {
+      title: "Shopify Store Mastery - Course Introduction",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Preview video
+      description: "Introduction to the complete Shopify mastery course",
+      locked: false,
+    },
+    {
+      title: "Setting Up Your Shopify Store",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      description: "Complete store setup and configuration",
+      locked: true,
+    },
+    {
+      title: "Product Research and Selection",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      description: "Finding winning products for your store",
+      locked: true,
+    },
+  ],
+  "react-development-bootcamp": [
+    {
+      title: "React Bootcamp - Course Overview",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Preview video
+      description: "Overview of the React development bootcamp",
+      locked: false,
+    },
+    {
+      title: "React Fundamentals",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      description: "Core concepts of React development",
+      locked: true,
+    },
+    {
+      title: "Building Your First React App",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      description: "Hands-on React application development",
+      locked: true,
     },
   ],
 }
 
+export function getAllCourses(): CourseVideos {
+  return courseVideos
+}
+
 export function getCourseVideos(courseId: string): CourseVideo[] {
-  return courseVideosData[courseId] || []
+  return courseVideos[courseId] || []
 }
 
 export function getCoursePreviewVideo(courseId: string): string | null {
   const videos = getCourseVideos(courseId)
-  return videos.length > 0 ? videos[0].url : null
+  const previewVideo = videos.find((video) => !video.locked)
+  return previewVideo?.url || null
 }
 
-// Admin functions for managing videos
-export function addCourseVideo(courseId: string, video: CourseVideo): void {
-  if (!courseVideosData[courseId]) {
-    courseVideosData[courseId] = []
+export function addCourseVideo(courseId: string, video: Omit<CourseVideo, "id">): void {
+  if (!courseVideos[courseId]) {
+    courseVideos[courseId] = []
   }
-  courseVideosData[courseId].push(video)
+  courseVideos[courseId].push(video as CourseVideo)
 }
 
 export function updateCourseVideo(courseId: string, videoIndex: number, video: Partial<CourseVideo>): void {
-  if (courseVideosData[courseId] && courseVideosData[courseId][videoIndex]) {
-    courseVideosData[courseId][videoIndex] = { ...courseVideosData[courseId][videoIndex], ...video }
+  if (courseVideos[courseId] && courseVideos[courseId][videoIndex]) {
+    courseVideos[courseId][videoIndex] = { ...courseVideos[courseId][videoIndex], ...video }
   }
 }
 
 export function deleteCourseVideo(courseId: string, videoIndex: number): void {
-  if (courseVideosData[courseId]) {
-    courseVideosData[courseId].splice(videoIndex, 1)
+  if (courseVideos[courseId]) {
+    courseVideos[courseId].splice(videoIndex, 1)
   }
-}
-
-export function getAllCourses(): Record<string, CourseVideo[]> {
-  return courseVideosData
 }

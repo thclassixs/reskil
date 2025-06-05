@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { EnhancedButton } from "@/components/ui/enhanced-button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -28,6 +29,7 @@ export default function LandingPage() {
   const [language, setLanguage] = useState<Language>("en")
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   const toggleLanguage = () => {
     setLanguage(language === "en" ? "ar" : "en")
@@ -42,7 +44,20 @@ export default function LandingPage() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
     }
+    setMobileMenuOpen(false)
   }
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setMobileMenuOpen(false)
+    }
+
+    if (mobileMenuOpen) {
+      document.addEventListener("click", handleClickOutside)
+      return () => document.removeEventListener("click", handleClickOutside)
+    }
+  }, [mobileMenuOpen])
 
   const content = {
     en: {
@@ -389,55 +404,66 @@ export default function LandingPage() {
   }
 
   const t = content[language]
-  const isRTL = language === "ar"
 
   return (
-    <div className={`min-h-screen bg-white ${isRTL ? "rtl" : "ltr"}`} dir={isRTL ? "rtl" : "ltr"}>
+    <div className="min-h-screen bg-white">
       {/* Navigation */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <span className="text-2xl font-bold text-blue-600">Reskil</span>
+                <Link href="/" className="text-2xl font-bold text-blue-600">
+                  Reskil
+                </Link>
               </div>
               <div className="hidden md:block">
-                <div
-                  className={`${isRTL ? "mr-10" : "ml-10"} flex items-baseline space-x-4 ${isRTL ? "space-x-reverse" : ""}`}
-                >
+                <div className="ml-10 flex items-baseline space-x-4">
                   <button
                     onClick={() => scrollToSection("hero")}
-                    className="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+                    className={`px-3 py-2 text-sm font-medium transition-colors rounded-lg ${
+                      pathname === "/"
+                        ? "text-blue-600 bg-blue-50"
+                        : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                    }`}
                   >
                     {t.nav.home}
                   </button>
                   <Link
                     href="/courses"
-                    className="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+                    className={`px-3 py-2 text-sm font-medium transition-colors rounded-lg ${
+                      pathname === "/courses"
+                        ? "text-blue-600 bg-blue-50"
+                        : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                    }`}
                   >
                     {t.nav.courses}
                   </Link>
                   <Link
                     href="/mini-courses"
-                    className="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+                    className={`px-3 py-2 text-sm font-medium transition-colors rounded-lg ${
+                      pathname === "/mini-courses"
+                        ? "text-blue-600 bg-blue-50"
+                        : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                    }`}
                   >
                     {t.nav.miniCourses}
                   </Link>
                   <button
                     onClick={() => scrollToSection("pricing")}
-                    className="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+                    className="text-gray-600 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 text-sm font-medium transition-colors rounded-lg"
                   >
                     {t.nav.pricing}
                   </button>
                   <button
                     onClick={() => scrollToSection("testimonials")}
-                    className="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+                    className="text-gray-600 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 text-sm font-medium transition-colors rounded-lg"
                   >
                     {t.nav.testimonials}
                   </button>
                   <button
                     onClick={() => scrollToSection("faq")}
-                    className="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+                    className="text-gray-600 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 text-sm font-medium transition-colors rounded-lg"
                   >
                     {t.nav.faq}
                   </button>
@@ -454,13 +480,8 @@ export default function LandingPage() {
                 <Globe className="h-4 w-4" />
                 <span>{language === "en" ? "العربية" : "English"}</span>
               </EnhancedButton>
-              <Link href="/admin">
-                <EnhancedButton variant="ghost" size="sm">
-                  Admin
-                </EnhancedButton>
-              </Link>
               <Link href="/signup">
-                <EnhancedButton>{t.nav.joinNow}</EnhancedButton>
+                <EnhancedButton size="sm">{t.nav.joinNow}</EnhancedButton>
               </Link>
             </div>
             <div className="md:hidden flex items-center space-x-2">
@@ -473,7 +494,14 @@ export default function LandingPage() {
                 <Globe className="h-4 w-4" />
                 <span className="text-xs">{language === "en" ? "AR" : "EN"}</span>
               </EnhancedButton>
-              <EnhancedButton variant="ghost" size="sm" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              <EnhancedButton
+                variant="ghost"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setMobileMenuOpen(!mobileMenuOpen)
+                }}
+              >
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </EnhancedButton>
             </div>
@@ -486,57 +514,45 @@ export default function LandingPage() {
         <div className="md:hidden bg-white border-b border-gray-200 shadow-lg">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <button
-              onClick={() => {
-                scrollToSection("hero")
-                setMobileMenuOpen(false)
-              }}
-              className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-blue-600 w-full text-left"
+              onClick={() => scrollToSection("hero")}
+              className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 w-full text-left rounded-lg"
             >
               {t.nav.home}
             </button>
             <Link
               href="/courses"
-              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600"
+              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg"
               onClick={() => setMobileMenuOpen(false)}
             >
               {t.nav.courses}
             </Link>
             <Link
               href="/mini-courses"
-              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600"
+              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg"
               onClick={() => setMobileMenuOpen(false)}
             >
               {t.nav.miniCourses}
             </Link>
             <button
-              onClick={() => {
-                scrollToSection("pricing")
-                setMobileMenuOpen(false)
-              }}
-              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 w-full text-left"
+              onClick={() => scrollToSection("pricing")}
+              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 w-full text-left rounded-lg"
             >
               {t.nav.pricing}
             </button>
             <button
-              onClick={() => {
-                scrollToSection("testimonials")
-                setMobileMenuOpen(false)
-              }}
-              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 w-full text-left"
+              onClick={() => scrollToSection("testimonials")}
+              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 w-full text-left rounded-lg"
             >
               {t.nav.testimonials}
             </button>
             <button
-              onClick={() => {
-                scrollToSection("faq")
-                setMobileMenuOpen(false)
-              }}
-              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 w-full text-left"
+              onClick={() => scrollToSection("faq")}
+              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 w-full text-left rounded-lg"
             >
               {t.nav.faq}
             </button>
             <div className="px-3 py-2">
-              <Link href="/signup">
+              <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
                 <EnhancedButton className="w-full">{t.nav.joinNow}</EnhancedButton>
               </Link>
             </div>
@@ -547,8 +563,8 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section id="hero" className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <Badge className="mb-6 bg-blue-100 text-blue-800 hover:bg-blue-100 text-sm font-medium px-4 py-2">
+          <div className={`text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
+            <Badge className="mb-6 bg-blue-100 text-blue-800 hover:bg-blue-100 text-sm font-medium px-4 py-2 rounded-lg">
               {t.hero.badge}
             </Badge>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
@@ -559,7 +575,7 @@ export default function LandingPage() {
               <Link href="/signup">
                 <EnhancedButton size="lg" className="px-8 py-4 text-lg">
                   {t.hero.cta1}
-                  <ArrowRight className={`${isRTL ? "mr-2" : "ml-2"} h-5 w-5`} />
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </EnhancedButton>
               </Link>
               <EnhancedButton
@@ -568,7 +584,7 @@ export default function LandingPage() {
                 className="px-8 py-4 text-lg"
                 onClick={() => scrollToSection("video-preview")}
               >
-                <Play className={`${isRTL ? "ml-2" : "mr-2"} h-5 w-5`} />
+                <Play className="mr-2 h-5 w-5" />
                 {t.hero.cta2}
               </EnhancedButton>
               <Link href="/courses">
@@ -613,13 +629,13 @@ export default function LandingPage() {
       {/* Features Section */}
       <section id="features" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.features.title}</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t.features.subtitle}</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {t.features.items.map((feature, index) => (
-              <div key={index} className="text-center">
+              <div key={index} className={`text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <feature.icon className="h-8 w-8 text-blue-600" />
                 </div>
@@ -634,15 +650,15 @@ export default function LandingPage() {
       {/* Pricing Section */}
       <section id="pricing" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.courses.title}</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t.courses.subtitle}</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Starter Course */}
-            <Card className="relative border-2 border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg">
-              <CardHeader className="text-center">
+            <Card className="relative border-2 border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg rounded-lg">
+              <CardHeader className={`text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
                 <CardTitle className="text-2xl font-bold">{t.courses.starter.name}</CardTitle>
                 <div className="text-4xl font-bold text-blue-600 my-4">{t.courses.starter.price}</div>
                 <p className="text-gray-600">{t.courses.starter.description}</p>
@@ -650,8 +666,8 @@ export default function LandingPage() {
               <CardContent>
                 <ul className="space-y-3 mb-8">
                   {t.courses.starter.features.map((feature, index) => (
-                    <li key={index} className="flex items-center">
-                      <CheckCircle className={`h-5 w-5 text-green-500 ${isRTL ? "ml-3" : "mr-3"}`} />
+                    <li key={index} className={`flex items-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
                       <span className="text-gray-700">{feature}</span>
                     </li>
                   ))}
@@ -663,11 +679,11 @@ export default function LandingPage() {
             </Card>
 
             {/* Full Access Pass */}
-            <Card className="relative border-2 border-blue-500 shadow-lg scale-105 hover:shadow-xl transition-all duration-300">
-              <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white">
+            <Card className="relative border-2 border-blue-500 shadow-lg scale-105 hover:shadow-xl transition-all duration-300 rounded-lg">
+              <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white rounded-lg">
                 {t.courses.fullAccess.popular}
               </Badge>
-              <CardHeader className="text-center">
+              <CardHeader className={`text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
                 <CardTitle className="text-2xl font-bold">{t.courses.fullAccess.name}</CardTitle>
                 <div className="text-4xl font-bold text-blue-600 my-4">{t.courses.fullAccess.price}</div>
                 <p className="text-gray-600">{t.courses.fullAccess.description}</p>
@@ -675,8 +691,8 @@ export default function LandingPage() {
               <CardContent>
                 <ul className="space-y-3 mb-8">
                   {t.courses.fullAccess.features.map((feature, index) => (
-                    <li key={index} className="flex items-center">
-                      <CheckCircle className={`h-5 w-5 text-green-500 ${isRTL ? "ml-3" : "mr-3"}`} />
+                    <li key={index} className={`flex items-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
                       <span className="text-gray-700">{feature}</span>
                     </li>
                   ))}
@@ -688,8 +704,8 @@ export default function LandingPage() {
             </Card>
 
             {/* Private Session */}
-            <Card className="relative border-2 border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg">
-              <CardHeader className="text-center">
+            <Card className="relative border-2 border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg rounded-lg">
+              <CardHeader className={`text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
                 <CardTitle className="text-2xl font-bold">{t.courses.private.name}</CardTitle>
                 <div className="text-4xl font-bold text-blue-600 my-4">{t.courses.private.price}</div>
                 <p className="text-gray-600">{t.courses.private.description}</p>
@@ -697,8 +713,8 @@ export default function LandingPage() {
               <CardContent>
                 <ul className="space-y-3 mb-8">
                   {t.courses.private.features.map((feature, index) => (
-                    <li key={index} className="flex items-center">
-                      <CheckCircle className={`h-5 w-5 text-green-500 ${isRTL ? "ml-3" : "mr-3"}`} />
+                    <li key={index} className={`flex items-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
                       <span className="text-gray-700">{feature}</span>
                     </li>
                   ))}
@@ -712,7 +728,7 @@ export default function LandingPage() {
 
           {/* Trust Elements */}
           <div className="mt-16 text-center">
-            <div className="flex justify-center items-center space-x-8 space-x-reverse opacity-60">
+            <div className="flex justify-center items-center space-x-8 opacity-60">
               <div className="flex items-center">
                 <Shield className="h-6 w-6 text-green-500 mr-2" />
                 <span className="text-sm">Secure Checkout</span>
@@ -733,7 +749,7 @@ export default function LandingPage() {
       {/* Testimonials Section */}
       <section id="testimonials" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.testimonials.title}</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t.testimonials.subtitle}</p>
           </div>
@@ -741,7 +757,7 @@ export default function LandingPage() {
             {t.testimonials.items.map((testimonial, index) => (
               <Card
                 key={index}
-                className="border-2 border-gray-100 hover:border-blue-200 transition-all duration-300 hover:shadow-lg"
+                className="border-2 border-gray-100 hover:border-blue-200 transition-all duration-300 hover:shadow-lg rounded-lg"
               >
                 <CardContent className="pt-6">
                   <div className="flex mb-4">
@@ -749,14 +765,14 @@ export default function LandingPage() {
                       <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                     ))}
                   </div>
-                  <p className="text-gray-700 mb-6 italic">"{testimonial.content}"</p>
+                  <p className={`text-gray-700 mb-6 italic ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
+                    "{testimonial.content}"
+                  </p>
                   <div className="flex items-center">
-                    <div
-                      className={`w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center ${isRTL ? "ml-4" : "mr-4"}`}
-                    >
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
                       <span className="text-blue-600 font-semibold text-lg">{testimonial.name.charAt(0)}</span>
                     </div>
-                    <div>
+                    <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
                       <p className="font-semibold text-gray-900">{testimonial.name}</p>
                       <p className="text-sm text-gray-600">{testimonial.role}</p>
                     </div>
@@ -771,27 +787,27 @@ export default function LandingPage() {
       {/* FAQ Section */}
       <section id="faq" className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.faq.title}</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t.faq.subtitle}</p>
           </div>
           <div className="space-y-4">
             {t.faq.items.map((item, index) => (
-              <Card key={index} className="border-2 border-gray-200 hover:border-blue-200 transition-colors">
+              <Card key={index} className="border-2 border-gray-200 hover:border-blue-200 transition-colors rounded-lg">
                 <CardContent className="p-0">
                   <button
-                    className="w-full p-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                    className={`w-full p-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors rounded-lg ${language === "ar" ? "rtl-text" : "ltr-text"}`}
                     onClick={() => toggleAccordion(index)}
                   >
                     <span className="text-lg font-semibold text-gray-900">{item.question}</span>
                     {activeAccordion === index ? (
-                      <ChevronUp className="h-5 w-5 text-gray-500" />
+                      <ChevronUp className="h-5 w-5 text-gray-500 flex-shrink-0" />
                     ) : (
-                      <ChevronDown className="h-5 w-5 text-gray-500" />
+                      <ChevronDown className="h-5 w-5 text-gray-500 flex-shrink-0" />
                     )}
                   </button>
                   {activeAccordion === index && (
-                    <div className="px-6 pb-6">
+                    <div className={`px-6 pb-6 ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
                       <p className="text-gray-700">{item.answer}</p>
                     </div>
                   )}
@@ -804,13 +820,15 @@ export default function LandingPage() {
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div
+          className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}
+        >
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">{t.cta.title}</h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">{t.cta.subtitle}</p>
           <Link href="/signup">
             <EnhancedButton size="xl" className="bg-white text-blue-600 hover:bg-gray-100 shadow-lg hover:shadow-xl">
               {t.cta.button}
-              <ArrowRight className={`${isRTL ? "mr-2" : "ml-2"} h-5 w-5`} />
+              <ArrowRight className="ml-2 h-5 w-5" />
             </EnhancedButton>
           </Link>
         </div>
@@ -824,9 +842,11 @@ export default function LandingPage() {
               <div className="flex items-center mb-4">
                 <span className="text-2xl font-bold text-blue-400">Reskil</span>
               </div>
-              <p className="text-gray-400 mb-4 max-w-md">{t.footer.description}</p>
+              <p className={`text-gray-400 mb-4 max-w-md ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
+                {t.footer.description}
+              </p>
             </div>
-            <div>
+            <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
               <h4 className="text-lg font-semibold mb-4">Contact</h4>
               <ul className="space-y-2">
                 <li>
@@ -857,7 +877,7 @@ export default function LandingPage() {
                 </li>
               </ul>
             </div>
-            <div>
+            <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
               <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 <li>
@@ -877,7 +897,7 @@ export default function LandingPage() {
                 </li>
               </ul>
             </div>
-            <div>
+            <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
               <h4 className="text-lg font-semibold mb-4">Legal</h4>
               <ul className="space-y-2">
                 <li>
@@ -894,7 +914,9 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-            <p className="text-gray-400 text-sm">{t.footer.copyright}</p>
+            <p className={`text-gray-400 text-sm ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
+              {t.footer.copyright}
+            </p>
           </div>
         </div>
       </footer>
