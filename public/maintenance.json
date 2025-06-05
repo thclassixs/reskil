@@ -1,6 +1,6 @@
 {
-  "enabled": false,
+  "enabled": true,
   "message": "We're currently performing scheduled maintenance to improve your experience.",
-  "estimatedDuration": "30 minutes",
+  "estimatedDuration": "48 hours",
   "lastUpdated": "2024-01-15T10:00:00Z"
 }
