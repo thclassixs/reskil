@@ -2,55 +2,38 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { EnhancedButton } from "@/components/ui/enhanced-button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Mail, Lock, Eye, EyeOff, AlertCircle } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Eye, EyeOff, Shield } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 
-export default function AdminLogin() {
-  const router = useRouter()
-  const { login, isAuthenticated } = useAuth()
+export default function AdminLoginPage() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  })
   const [error, setError] = useState("")
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/admin")
-    }
-  }, [isAuthenticated, router])
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
-    setError("")
-  }
+  const [isLoading, setIsLoading] = useState(false)
+  const { login } = useAuth()
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
     setError("")
+    setIsLoading(true)
 
     try {
-      const success = await login(formData.email, formData.password)
-
+      const success = await login(email, password)
       if (success) {
         router.push("/admin")
       } else {
-        setError("Invalid email or password. Please check your credentials.")
+        setError("Invalid email or password. Please try again.")
       }
-    } catch (err) {
+    } catch (error) {
       setError("An error occurred during login. Please try again.")
     } finally {
       setIsLoading(false)
@@ -58,74 +41,77 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-gray-900">Admin Login</CardTitle>
-          <p className="text-gray-600">Sign in to access the admin panel</p>
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-4 mx-auto">
+            <Shield className="h-6 w-6 text-blue-600" />
+          </div>
+          <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
+          <CardDescription>Access the Reskil administration panel</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
-              <div className="relative mt-1">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="admin@reskil.com"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  disabled={isLoading}
-                  className="pl-10"
-                />
-              </div>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your admin email"
+                required
+                className="rounded-lg"
+              />
             </div>
 
-            <div>
+            <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <div className="relative mt-1">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <div className="relative">
                 <Input
                   id="password"
-                  name="password"
                   type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={handleInputChange}
                   required
-                  disabled={isLoading}
-                  className="pl-10 pr-10"
+                  className="rounded-lg pr-10"
                 />
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 h-4 w-4 text-gray-400 hover:text-gray-600"
-                  disabled={isLoading}
                 >
-                  {showPassword ? <EyeOff /> : <Eye />}
-                </button>
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4 text-gray-400" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-gray-400" />
+                  )}
+                </Button>
               </div>
             </div>
 
             {error && (
-              <div className="flex items-center space-x-2 text-red-600 text-sm bg-red-50 p-3 rounded-lg">
-                <AlertCircle className="h-4 w-4" />
-                <span>{error}</span>
-              </div>
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
             )}
 
-            <EnhancedButton type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing In..." : "Sign In"}
-            </EnhancedButton>
+            <Button type="submit" className="w-full rounded-lg" disabled={isLoading}>
+              {isLoading ? "Signing in..." : "Sign In"}
+            </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">
-            <p className="font-medium mb-2">Demo Credentials:</p>
-            <p>Email: admin@reskil.com</p>
-            <p>Password: classixs12340</p>
+          <div className="mt-6 text-center">
+            <Button
+              variant="ghost"
+              onClick={() => router.push("/")}
+              className="text-sm text-gray-600 hover:text-gray-900"
+            >
+              ← Back to Website
+            </Button>
           </div>
         </CardContent>
       </Card>

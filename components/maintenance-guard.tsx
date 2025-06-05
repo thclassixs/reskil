@@ -1,37 +1,53 @@
 "use client"
 
 import type React from "react"
-
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { useSettings } from "@/lib/settings-service"
-import { useAuth } from "@/lib/auth-context"
+import { useMaintenanceMode } from "@/lib/maintenance-service"
 
 interface MaintenanceGuardProps {
   children: React.ReactNode
 }
 
 export function MaintenanceGuard({ children }: MaintenanceGuardProps) {
-  const { isMaintenanceMode } = useSettings()
-  const { checkAuth } = useAuth()
+  const { isMaintenanceMode, isLoading } = useMaintenanceMode()
   const router = useRouter()
   const pathname = usePathname()
+  const [isClient, setIsClient] = useState(false)
+
+  // Ensure this only runs on the client
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
-    const isAdmin = checkAuth()
+    // Only run on client side and after loading is complete
+    if (!isClient || isLoading) return
+
+    const isAdminPath = pathname.startsWith("/admin")
     const isMaintenancePage = pathname === "/maintenance"
-    const isAdminRoute = pathname.startsWith("/admin")
 
-    // If maintenance mode is on and user is not admin and not already on maintenance page
-    if (isMaintenanceMode() && !isAdmin && !isMaintenancePage && !isAdminRoute) {
+    // If maintenance mode is enabled and user is not on admin or maintenance paths
+    if (isMaintenanceMode && !isAdminPath && !isMaintenancePage) {
       router.push("/maintenance")
+      return
     }
 
-    // If maintenance mode is off and user is on maintenance page, redirect to home
-    if (!isMaintenanceMode() && isMaintenancePage) {
+    // If maintenance mode is disabled and user is on maintenance page (but not admin)
+    if (!isMaintenanceMode && isMaintenancePage && !isAdminPath) {
       router.push("/")
+      return
     }
-  }, [isMaintenanceMode, checkAuth, router, pathname])
+  }, [isMaintenanceMode, isLoading, isClient, pathname, router])
+
+  // Show loading state or children based on client-side status
+  if (!isClient || isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
 
   return <>{children}</>
 }
