@@ -14,7 +14,7 @@ Any changes you make to your deployed app will be automatically pushed to this r
 
 Your project is live at:
 
-**[https://vercel.com/thclassixs-beta/v0-arabic-landing-page](https://vercel.com/thclassixs-beta/v0-arabic-landing-page)**
+**[https://vercel.com/thclassixs-beta/reskil](https://vercel.com/thclassixs-beta/reskil)**
 
 ## Build your app
 
