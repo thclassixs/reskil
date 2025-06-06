@@ -753,7 +753,7 @@ export default function LandingPage() {
             </p>
             <div className="flex items-center">
                 <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                <img src="/avatars/mouad.svg" alt="Mouad" className="w-full h-full object-cover" />
+                <img src="/avatars/mouad.webp" alt="Mouad" className="w-full h-full object-cover" />
                 </div>
                 <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
                 <p className="font-semibold text-gray-900">Mouad</p>
@@ -775,7 +775,7 @@ export default function LandingPage() {
             </p>
             <div className="flex items-center">
                 <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                <img src="/avatars/hamza.svg" alt="Hamza" className="w-full h-full object-cover" />
+                <img src="/avatars/hamza.webp" alt="Hamza" className="w-full h-full object-cover" />
                 </div>
                 <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
                 <p className="font-semibold text-gray-900">Hamza</p>
@@ -797,7 +797,7 @@ export default function LandingPage() {
             </p>
             <div className="flex items-center">
                 <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                <img src="/avatars/imane.svg" alt="Imane" className="w-full h-full object-cover" />
+                <img src="/avatars/imane.webp" alt="Imane" className="w-full h-full object-cover" />
                 </div>
                 <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
                 <p className="font-semibold text-gray-900">Imane</p>
@@ -819,7 +819,7 @@ export default function LandingPage() {
             </p>
             <div className="flex items-center">
                 <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                <img src="/avatars/rida.svg" alt="Rida" className="w-full h-full object-cover" />
+                <img src="/avatars/rida.webp" alt="Rida" className="w-full h-full object-cover" />
                 </div>
                 <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
                 <p className="font-semibold text-gray-900">Rida</p>
