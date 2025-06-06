@@ -30,7 +30,7 @@ export function YouTubePlayer({
   const [progress, setProgress] = useState(0)
   const [isCompleted, setIsCompleted] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
-  const progressIntervalRef = useRef<NodeJS.Timeout>()
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
   // Extract video ID from YouTube URL
   const getYouTubeVideoId = (url: string): string | null => {
@@ -60,6 +60,13 @@ export function YouTubePlayer({
     // Reset states when video URL changes
     setIsError(false)
     setIsLoading(true)
+    setProgress(0)
+    setIsCompleted(false)
+    
+    // Clear any existing interval
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current)
+    }
   }, [videoUrl])
 
   const handleIframeLoad = () => {
@@ -108,7 +115,7 @@ export function YouTubePlayer({
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Lock className="h-8 w-8 text-blue-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">{title ? title : "Content Locked"}</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{title || "Content Locked"}</h3>
           <p className="text-gray-600 mb-6 max-w-sm">
             Enroll in this course or complete the previous video to unlock this content
           </p>
@@ -156,7 +163,7 @@ export function YouTubePlayer({
             className="absolute top-0 left-0 w-full h-full"
             onLoad={handleIframeLoad}
             onError={handleIframeError}
-          ></iframe>
+          />
         )}
       </div>
 
@@ -170,7 +177,7 @@ export function YouTubePlayer({
               {isCompleted && <CheckCircle className="h-4 w-4 text-green-500" />}
             </div>
           </div>
-          <Progress value={progress} className="h-2" />
+          <Progress value={progress} max={100} className="h-2" />
         </div>
       )}
     </div>

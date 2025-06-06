@@ -41,7 +41,7 @@ export function useMaintenanceMode() {
     checkMaintenanceMode()
 
     // Check for updates every 30 seconds
-    const interval = setInterval(checkMaintenanceMode, 30000)
+    const interval = setInterval(checkMaintenanceMode, 60000)
 
     return () => clearInterval(interval)
   }, [])

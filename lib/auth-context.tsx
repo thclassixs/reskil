@@ -9,7 +9,6 @@ interface AuthContextType {
   logout: () => void
   checkAuth: () => boolean
 }
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {

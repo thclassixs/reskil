@@ -21,7 +21,7 @@ interface SettingsContextType {
 const defaultSettings: Settings = {
   maintenanceMode: false,
   signupEnabled: true,
-  defaultLanguage: "en",
+  defaultLanguage: "ar",
   emailNotifications: true,
   autoApproveUsers: true,
   allowGuestAccess: false,
