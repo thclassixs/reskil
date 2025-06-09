@@ -1,16 +1,5 @@
 "use client"
 
-<<<<<<< HEAD
-import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
-
-interface AuthContextType {
-  isAuthenticated: boolean
-  login: (email: string, password: string) => Promise<boolean>
-  logout: () => void
-  checkAuth: () => boolean
-}
-=======
 import { createContext, useContext, useState, useEffect, useCallback } from "react"
 import api from './api'
 
@@ -53,68 +42,10 @@ interface AuthContextType {
   signup: (params: SignupParams) => Promise<AuthResponse>
 }
 
->>>>>>> 82081f5 (update V3)
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-<<<<<<< HEAD
-
-  useEffect(() => {
-    // Check if user is authenticated on mount
-    const token = localStorage.getItem("admin_token")
-    const expiry = localStorage.getItem("admin_token_expiry")
-
-    if (token && expiry) {
-      const now = new Date().getTime()
-      if (now < Number.parseInt(expiry)) {
-        setIsAuthenticated(true)
-      } else {
-        // Token expired, clear it
-        localStorage.removeItem("admin_token")
-        localStorage.removeItem("admin_token_expiry")
-      }
-    }
-  }, [])
-
-  const login = async (email: string, password: string): Promise<boolean> => {
-    // Validate credentials
-    if (email === "admin@reskil.com" && password === "classixs12340") {
-      // Create a token with 24-hour expiry
-      const token = btoa(`${email}:${Date.now()}`)
-      const expiry = new Date().getTime() + 24 * 60 * 60 * 1000 // 24 hours
-
-      localStorage.setItem("admin_token", token)
-      localStorage.setItem("admin_token_expiry", expiry.toString())
-      setIsAuthenticated(true)
-      return true
-    }
-    return false
-  }
-
-  const logout = () => {
-    localStorage.removeItem("admin_token")
-    localStorage.removeItem("admin_token_expiry")
-    setIsAuthenticated(false)
-  }
-
-  const checkAuth = (): boolean => {
-    const token = localStorage.getItem("admin_token")
-    const expiry = localStorage.getItem("admin_token_expiry")
-
-    if (!token || !expiry) return false
-
-    const now = new Date().getTime()
-    if (now >= Number.parseInt(expiry)) {
-      logout()
-      return false
-    }
-
-    return true
-  }
-
-  return <AuthContext.Provider value={{ isAuthenticated, login, logout, checkAuth }}>{children}</AuthContext.Provider>
-=======
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [loginLoading, setLoginLoading] = useState(false)
@@ -266,7 +197,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
->>>>>>> 82081f5 (update V3)
 }
 
 export function useAuth() {
@@ -275,8 +205,6 @@ export function useAuth() {
     throw new Error("useAuth must be used within an AuthProvider")
   }
   return context
-<<<<<<< HEAD
-=======
 }
 
 export function useAuthenticatedFetch() {
@@ -306,5 +234,4 @@ export function useAuthenticatedFetch() {
   }
 
   return authenticatedFetch
->>>>>>> 82081f5 (update V3)
 }

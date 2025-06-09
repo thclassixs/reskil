@@ -2,10 +2,8 @@
 
 # dependencies
 /node_modules
-<<<<<<< HEAD
+/backend
 
-=======
->>>>>>> 82081f5 (update V3)
 # next.js
 /.next/
 /out/

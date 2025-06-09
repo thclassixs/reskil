@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 import api from '@/lib/api'
 
->>>>>>> 82081f5 (update V3)
 interface AdminCourse {
   id: string
   title: string
@@ -33,147 +30,6 @@ interface AdminUser {
 }
 
 class AdminService {
-<<<<<<< HEAD
-  private courses: AdminCourse[] = [
-    {
-      id: "shopify-starter",
-      title: "Shopify Starter Kit",
-      description: "Learn the basics of setting up and running a Shopify store",
-      price: "$29",
-      originalPrice: "$49",
-      duration: "2 hours",
-      level: "Beginner",
-      category: "E-commerce",
-      features: ["Store Setup", "Product Management", "Payment Processing", "Basic Marketing", "Order Fulfillment"],
-      instructor: {
-        name: "Sarah Johnson",
-        title: "E-commerce Specialist",
-        avatar: "/placeholder.svg?height=100&width=100",
-      },
-      isPublished: true,
-      createdAt: "2024-01-15",
-      updatedAt: "2024-01-20",
-    },
-    {
-      id: "tiktok-ads-mini",
-      title: "TikTok Ads Mini Course",
-      description: "Quick introduction to creating effective TikTok ad campaigns",
-      price: "$19",
-      originalPrice: "$39",
-      duration: "1.5 hours",
-      level: "Beginner",
-      category: "Marketing",
-      features: ["Ad Creation", "Targeting Strategies", "Budget Optimization", "Performance Tracking"],
-      instructor: {
-        name: "Mike Chen",
-        title: "Digital Marketing Expert",
-        avatar: "/placeholder.svg?height=100&width=100",
-      },
-      isPublished: true,
-      createdAt: "2024-01-10",
-      updatedAt: "2024-01-18",
-    },
-    {
-      id: "intro-ai-prompting",
-      title: "Intro to AI Prompting",
-      description: "Learn the fundamentals of crafting effective prompts for AI tools",
-      price: "$24",
-      originalPrice: "$44",
-      duration: "2 hours",
-      level: "Beginner",
-      category: "AI & Automation",
-      features: ["Prompt Engineering", "AI Tool Selection", "Workflow Integration", "Best Practices"],
-      instructor: {
-        name: "Alex Rodriguez",
-        title: "AI Specialist",
-        avatar: "/placeholder.svg?height=100&width=100",
-      },
-      isPublished: true,
-      createdAt: "2024-01-12",
-      updatedAt: "2024-01-22",
-    },
-  ]
-
-  private users: AdminUser[] = [
-    {
-      id: "admin-1",
-      email: "admin@reskil.com",
-      name: "Admin User",
-      role: "admin",
-      createdAt: "2024-01-01",
-    },
-  ]
-
-  // Course management
-  getAllCourses(): AdminCourse[] {
-    return this.courses
-  }
-
-  getCourse(id: string): AdminCourse | undefined {
-    return this.courses.find((course) => course.id === id)
-  }
-
-  createCourse(course: Omit<AdminCourse, "id" | "createdAt" | "updatedAt">): AdminCourse {
-    const newCourse: AdminCourse = {
-      ...course,
-      id: `course-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }
-    this.courses.push(newCourse)
-    return newCourse
-  }
-
-  updateCourse(id: string, updates: Partial<AdminCourse>): AdminCourse | null {
-    const courseIndex = this.courses.findIndex((course) => course.id === id)
-    if (courseIndex === -1) return null
-
-    this.courses[courseIndex] = {
-      ...this.courses[courseIndex],
-      ...updates,
-      updatedAt: new Date().toISOString(),
-    }
-    return this.courses[courseIndex]
-  }
-
-  deleteCourse(id: string): boolean {
-    const courseIndex = this.courses.findIndex((course) => course.id === id)
-    if (courseIndex === -1) return false
-
-    this.courses.splice(courseIndex, 1)
-    return true
-  }
-
-  // User management
-  getAllUsers(): AdminUser[] {
-    return this.users
-  }
-
-  createUser(user: Omit<AdminUser, "id" | "createdAt">): AdminUser {
-    const newUser: AdminUser = {
-      ...user,
-      id: `user-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-    }
-    this.users.push(newUser)
-    return newUser
-  }
-
-  // Analytics
-  getAnalytics() {
-    return {
-      totalCourses: this.courses.length,
-      publishedCourses: this.courses.filter((c) => c.isPublished).length,
-      totalUsers: this.users.length,
-      totalRevenue: "$12,450", // Mock data
-      monthlyGrowth: "+15%", // Mock data
-    }
-  }
-}
-
-export const adminService = new AdminService()
-export type { AdminCourse, AdminUser }
-=======
   // Course management
   async getAllCourses(): Promise<AdminCourse[]> {
     try {
@@ -260,4 +116,3 @@ export type { AdminCourse, AdminUser }
 
 export const adminService = new AdminService();
 export type { AdminCourse, AdminUser };
->>>>>>> 82081f5 (update V3)

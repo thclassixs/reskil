@@ -1,17 +1,8 @@
-<<<<<<< HEAD
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-import { AuthProvider } from "@/lib/auth-context"
-import { MaintenanceGuard } from "@/components/maintenance-guard"
-=======
 // app/layout.tsx
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { AuthProvider } from "@/components/providers/auth-provider"
->>>>>>> 82081f5 (update V3)
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -30,18 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-<<<<<<< HEAD
-        <AuthProvider>
-          <MaintenanceGuard>{children}</MaintenanceGuard>
-        </AuthProvider>
-      </body>
-    </html>
-  )
-}
-=======
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   )
 }
->>>>>>> 82081f5 (update V3)

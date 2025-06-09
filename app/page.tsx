@@ -881,13 +881,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-<<<<<<< HEAD
-      {/* AI Assistant Widget */}
-      <elevenlabs-convai agent-id="agent_01jxa2wqz1efqt38wsxd9qhpny"></elevenlabs-convai>
-	  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-
-=======
->>>>>>> 82081f5 (update V3)
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
