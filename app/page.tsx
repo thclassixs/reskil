@@ -880,6 +880,8 @@ export default function LandingPage() {
           </Link>
         </div>
       </section>
+	  <elevenlabs-convai agent-id="agent_01jxa2wqz1efqt38wsxd9qhpny"></elevenlabs-convai>
+	  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
