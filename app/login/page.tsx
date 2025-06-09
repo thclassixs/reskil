@@ -1,27 +1,51 @@
 "use client"
 
 import type React from "react"
+<<<<<<< HEAD
 
 import { useState } from "react"
 import Link from "next/link"
+=======
+import { useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+>>>>>>> 82081f5 (update V3)
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
+<<<<<<< HEAD
 import { Globe, ArrowLeft, Eye, EyeOff, Mail, Lock } from "lucide-react"
+=======
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Globe, ArrowLeft, Eye, EyeOff, Mail, Lock, Loader2, AlertCircle } from "lucide-react"
+>>>>>>> 82081f5 (update V3)
 
 type Language = "en" | "ar"
 
 export default function LoginPage() {
+<<<<<<< HEAD
   const [language, setLanguage] = useState<Language>("en")
   const [showPassword, setShowPassword] = useState(false)
+=======
+  const router = useRouter()
+  const [language, setLanguage] = useState<Language>("en")
+  const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+>>>>>>> 82081f5 (update V3)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     rememberMe: false,
   })
 
+<<<<<<< HEAD
+=======
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+
+>>>>>>> 82081f5 (update V3)
   const toggleLanguage = () => {
     setLanguage(language === "en" ? "ar" : "en")
   }
@@ -32,12 +56,71 @@ export default function LoginPage() {
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     })
+<<<<<<< HEAD
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Handle form submission here
     console.log("Login form submitted:", formData)
+=======
+    if (error) setError("")
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (isLoading) return // Prevent duplicate submissions
+    
+    setIsLoading(true)
+    setError("")
+
+    try {
+      // Enhanced validation
+      if (!formData.email.trim() || !formData.password.trim()) {
+        throw new Error(t.form.fillAllFields)
+      }
+
+      if (!formData.email.includes("@") || !formData.email.includes(".")) {
+        throw new Error(t.form.invalidEmail)
+      }
+
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // For cookies if using HTTP-only
+        body: JSON.stringify({
+          email: formData.email.toLowerCase(),
+          password: formData.password,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || t.form.loginFailed)
+      }
+
+      // Handle token storage if using JWT
+      if (data.accessToken) {
+        if (formData.rememberMe) {
+          localStorage.setItem("accessToken", data.accessToken)
+        } else {
+          sessionStorage.setItem("accessToken", data.accessToken)
+        }
+      }
+
+      // Redirect to dashboard or intended page
+      router.push("/dashboard")
+      
+    } catch (err) {
+      console.error("Login error:", err)
+      setError(err instanceof Error ? err.message : t.form.loginFailed)
+    } finally {
+      setIsLoading(false)
+    }
+>>>>>>> 82081f5 (update V3)
   }
 
   const content = {
@@ -49,6 +132,7 @@ export default function LoginPage() {
         password: "Password",
         rememberMe: "Remember me",
         signIn: "Sign In",
+<<<<<<< HEAD
         emailPlaceholder: "Enter your email address",
         passwordPlaceholder: "Enter your password",
         forgotPassword: "Forgot your password?",
@@ -60,6 +144,19 @@ export default function LoginPage() {
       social: {
         title: "Or sign in with",
         google: "Continue with Google",
+=======
+        signingIn: "Signing In...",
+        emailPlaceholder: "Enter your email address",
+        passwordPlaceholder: "Enter your password",
+        forgotPassword: "Forgot your password?",
+        fillAllFields: "Please fill in all fields",
+        invalidEmail: "Please enter a valid email address",
+        loginFailed: "Login failed. Please try again.",
+      },
+      signup: {
+        text: "Don't have an account?",
+        link: "Sign up",
+>>>>>>> 82081f5 (update V3)
       },
     },
     ar: {
@@ -70,18 +167,31 @@ export default function LoginPage() {
         password: "كلمة المرور",
         rememberMe: "تذكرني",
         signIn: "تسجيل الدخول",
+<<<<<<< HEAD
         emailPlaceholder: "أدخل عنوان بريدك الإلكتروني",
         passwordPlaceholder: "أدخل كلمة المرور",
         forgotPassword: "نسيت كلمة المرور؟",
+=======
+        signingIn: "جاري تسجيل الدخول...",
+        emailPlaceholder: "أدخل عنوان بريدك الإلكتروني",
+        passwordPlaceholder: "أدخل كلمة المرور",
+        forgotPassword: "نسيت كلمة المرور؟",
+        fillAllFields: "يرجى ملء جميع الحقول",
+        invalidEmail: "يرجى إدخال عنوان بريد إلكتروني صالح",
+        loginFailed: "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.",
+>>>>>>> 82081f5 (update V3)
       },
       signup: {
         text: "ليس لديك حساب؟",
         link: "سجل هنا",
       },
+<<<<<<< HEAD
       social: {
         title: "أو سجل دخولك باستخدام",
         google: "متابعة مع Google",
       },
+=======
+>>>>>>> 82081f5 (update V3)
     },
   }
 
@@ -116,6 +226,16 @@ export default function LoginPage() {
               <p className="text-gray-600 text-center">{t.subtitle}</p>
             </CardHeader>
             <CardContent className="px-0">
+<<<<<<< HEAD
+=======
+              {error && (
+                <Alert variant="destructive" className="mb-6">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+>>>>>>> 82081f5 (update V3)
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <Label htmlFor="email">{t.form.email}</Label>
@@ -129,7 +249,13 @@ export default function LoginPage() {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
+<<<<<<< HEAD
                       className={isRTL ? "pr-10" : "pl-10"}
+=======
+                      disabled={isLoading}
+                      className={isRTL ? "pr-10" : "pl-10"}
+                      autoFocus
+>>>>>>> 82081f5 (update V3)
                     />
                   </div>
                 </div>
@@ -146,12 +272,24 @@ export default function LoginPage() {
                       value={formData.password}
                       onChange={handleInputChange}
                       required
+<<<<<<< HEAD
                       className={isRTL ? "pr-10 pl-10" : "pl-10 pr-10"}
+=======
+                      disabled={isLoading}
+                      className={isRTL ? "pr-10 pl-10" : "pl-10 pr-10"}
+                      minLength={6}
+>>>>>>> 82081f5 (update V3)
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
+<<<<<<< HEAD
                       className={`absolute top-3 h-4 w-4 text-gray-400 ${isRTL ? "left-3" : "right-3"}`}
+=======
+                      disabled={isLoading}
+                      className={`absolute top-3 h-4 w-4 text-gray-400 hover:text-gray-600 ${isRTL ? "left-3" : "right-3"}`}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+>>>>>>> 82081f5 (update V3)
                     >
                       {showPassword ? <EyeOff /> : <Eye />}
                     </button>
@@ -165,16 +303,29 @@ export default function LoginPage() {
                       name="rememberMe"
                       checked={formData.rememberMe}
                       onCheckedChange={(checked) => setFormData({ ...formData, rememberMe: checked as boolean })}
+<<<<<<< HEAD
+=======
+                      disabled={isLoading}
+>>>>>>> 82081f5 (update V3)
                     />
                     <Label htmlFor="rememberMe" className="text-sm">
                       {t.form.rememberMe}
                     </Label>
                   </div>
+<<<<<<< HEAD
                   <Link href="/forgot-password" className="text-sm text-blue-600 hover:text-blue-700">
+=======
+                  <Link 
+                    href="/forgot-password" 
+                    className="text-sm text-blue-600 hover:text-blue-700"
+                    onClick={(e) => isLoading && e.preventDefault()}
+                  >
+>>>>>>> 82081f5 (update V3)
                     {t.form.forgotPassword}
                   </Link>
                 </div>
 
+<<<<<<< HEAD
                 <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                   {t.form.signIn}
                 </Button>
@@ -219,6 +370,32 @@ export default function LoginPage() {
                 <p className="text-sm text-gray-600">
                   {t.signup.text}{" "}
                   <Link href="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
+=======
+                <Button 
+                  type="submit" 
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      {t.form.signingIn}
+                    </>
+                  ) : (
+                    t.form.signIn
+                  )}
+                </Button>
+              </form>
+
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600">
+                  {t.signup.text}{" "}
+                  <Link 
+                    href="/signup" 
+                    className="text-blue-600 hover:text-blue-700 font-medium"
+                    onClick={(e) => isLoading && e.preventDefault()}
+                  >
+>>>>>>> 82081f5 (update V3)
                     {t.signup.link}
                   </Link>
                 </p>
@@ -229,4 +406,8 @@ export default function LoginPage() {
       </div>
     </div>
   )
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 82081f5 (update V3)

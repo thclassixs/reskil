@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 
 interface MaintenanceConfig {
+<<<<<<< HEAD
   enabled: boolean
   message?: string
   estimatedDuration?: string
@@ -11,6 +12,16 @@ interface MaintenanceConfig {
 
 export function useMaintenanceMode() {
   const [maintenanceConfig, setMaintenanceConfig] = useState<MaintenanceConfig>({ enabled: false })
+=======
+  enabled: boolean;
+  message: string;
+  estimatedDuration: string;
+  lastUpdated: Date;
+}
+
+export function useMaintenanceMode() {
+  const [maintenanceConfig, setMaintenanceConfig] = useState<MaintenanceConfig>({ enabled: false } as MaintenanceConfig)
+>>>>>>> 82081f5 (update V3)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -28,11 +39,19 @@ export function useMaintenanceMode() {
           setMaintenanceConfig(config)
         } else {
           console.warn("Failed to fetch maintenance config, defaulting to disabled")
+<<<<<<< HEAD
           setMaintenanceConfig({ enabled: false })
         }
       } catch (error) {
         console.warn("Error fetching maintenance config:", error)
         setMaintenanceConfig({ enabled: false })
+=======
+          setMaintenanceConfig({ enabled: false } as MaintenanceConfig)
+        }
+      } catch (error) {
+        console.warn("Error fetching maintenance config:", error)
+        setMaintenanceConfig({ enabled: false } as MaintenanceConfig)
+>>>>>>> 82081f5 (update V3)
       } finally {
         setIsLoading(false)
       }

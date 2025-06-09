@@ -2,7 +2,10 @@
 
 # dependencies
 /node_modules
+<<<<<<< HEAD
 
+=======
+>>>>>>> 82081f5 (update V3)
 # next.js
 /.next/
 /out/

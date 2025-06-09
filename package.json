@@ -38,6 +38,10 @@
     "@radix-ui/react-toggle-group": "1.1.1",
     "@radix-ui/react-tooltip": "1.1.6",
     "autoprefixer": "^10.4.20",
+<<<<<<< HEAD
+=======
+    "axios": "^1.9.0",
+>>>>>>> 82081f5 (update V3)
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
@@ -46,6 +50,10 @@
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
+<<<<<<< HEAD
+=======
+    "next-auth": "^4.24.11",
+>>>>>>> 82081f5 (update V3)
     "next-themes": "^0.4.4",
     "react": "^19",
     "react-day-picker": "8.10.1",
@@ -67,4 +75,8 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 82081f5 (update V3)

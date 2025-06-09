@@ -6,7 +6,19 @@ import { EnhancedButton } from "@/components/ui/enhanced-button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+<<<<<<< HEAD
 import { Star, Clock, Globe, ArrowLeft, Play, CheckCircle, ShoppingCart } from "lucide-react"
+=======
+import {
+  Star,
+  Clock,
+  Globe,
+  ArrowLeft,
+  Play,
+  CheckCircle,
+  ShoppingCart,
+} from "lucide-react"
+>>>>>>> 82081f5 (update V3)
 import { YouTubePlayer } from "@/components/youtube-player"
 import { VideoPreviewModal } from "@/components/video-preview-modal"
 import { getCourseVideos, getCoursePreviewVideo } from "@/services/course-videos"
@@ -27,23 +39,76 @@ interface Course {
   features: string[]
 }
 
+<<<<<<< HEAD
 export default function freeCoursesPage() {
+=======
+interface CourseVideo {
+  url: string
+}
+
+interface VideoProgress {
+  completed: boolean
+}
+
+export default function FreeCoursesPage() {
+>>>>>>> 82081f5 (update V3)
   const [language, setLanguage] = useState<Language>("en")
   const [showVideoModal, setShowVideoModal] = useState(false)
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | null>(null)
   const [currentCourseTitle, setCurrentCourseTitle] = useState<string>("")
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null)
   const [courseProgress, setCourseProgress] = useState<Record<string, any>>({})
+<<<<<<< HEAD
+=======
+  const [courseVideos, setCourseVideos] = useState<CourseVideo[]>([])
+  const [videoProgresses, setVideoProgresses] = useState<Record<number, VideoProgress | null>>({})
+>>>>>>> 82081f5 (update V3)
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
+<<<<<<< HEAD
+=======
+  useEffect(() => {
+    if (!isMounted) return
+
+    const updateProgress = () => {
+      const progress: Record<string, any> = {}
+      freeCourses.forEach((course) => {
+        progress[course.id] = videoTracker.getCourseProgress(course.id)
+      })
+      setCourseProgress(progress)
+    }
+
+    updateProgress()
+    const interval = setInterval(updateProgress, 3000)
+    return () => clearInterval(interval)
+  }, [isMounted])
+
+  useEffect(() => {
+    const fetchVideosAndProgress = async () => {
+      if (!expandedCourse || !isMounted) return
+      const videos = await getCourseVideos(expandedCourse)
+      setCourseVideos(videos)
+
+      const progresses: Record<number, VideoProgress | null> = {}
+      for (let i = 0; i < videos.length; i++) {
+        progresses[i] = await videoTracker.getVideoProgress(expandedCourse, i)
+      }
+      setVideoProgresses(progresses)
+    }
+
+    fetchVideosAndProgress()
+  }, [expandedCourse, isMounted])
+
+>>>>>>> 82081f5 (update V3)
   const toggleLanguage = () => {
     setLanguage(language === "en" ? "ar" : "en")
   }
 
+<<<<<<< HEAD
   const content = {
     en: {
       title: "Free Courses",
@@ -83,6 +148,25 @@ export default function freeCoursesPage() {
       ctaButton: "ابدأ اليوم",
       features: "ما ستتعلمه:",
     },
+=======
+  const handlePurchase = (courseId: string) => {
+    if (!isMounted) return
+    videoTracker.purchaseCourse(courseId)
+    setCourseProgress((prev) => ({
+      ...prev,
+      [courseId]: videoTracker.getCourseProgress(courseId),
+    }))
+    alert(language === "en" ? "Course purchased successfully!" : "تم شراء الدورة بنجاح!")
+  }
+
+  const handlePreviewClick = async (courseId: string, title: string) => {
+    const previewVideo = await getCoursePreviewVideo(courseId)
+    if (previewVideo) {
+      setCurrentVideoUrl(previewVideo)
+      setCurrentCourseTitle(title)
+      setShowVideoModal(true)
+    }
+>>>>>>> 82081f5 (update V3)
   }
 
   const freeCourses: Course[] = [
@@ -139,6 +223,7 @@ export default function freeCoursesPage() {
     },
   ]
 
+<<<<<<< HEAD
   const t = content[language]
   const isRTL = language === "ar"
 
@@ -399,6 +484,83 @@ export default function freeCoursesPage() {
       </section>
 
       {/* Video Preview Modal */}
+=======
+  const t = {
+    en: {
+      title: "Free Courses",
+      subtitle: "Quick, focused courses to help you learn specific skills in just a few hours",
+      price: "Price",
+      duration: "Duration",
+      level: "Level",
+      enroll: "Enroll Now",
+      preview: "Preview",
+      showVideos: "Show Videos",
+      hideVideos: "Hide Videos",
+      completed: "Completed",
+      progress: "Progress",
+      purchase: "Purchase Course",
+      purchased: "Purchased",
+      ctaTitle: "Ready to Upgrade Your Skills?",
+      ctaSubtitle: "Our Free Courses are perfect for busy professionals",
+      ctaButton: "Get Started Today",
+      features: "What you'll learn:",
+    },
+    ar: {
+      title: "الدورات المجانية",
+      subtitle: "دورات سريعة ومركزة لمساعدتك على تعلم مهارات محددة في ساعات قليلة",
+      price: "السعر",
+      duration: "المدة",
+      level: "المستوى",
+      enroll: "سجل الآن",
+      preview: "معاينة",
+      showVideos: "عرض الفيديوهات",
+      hideVideos: "إخفاء الفيديوهات",
+      completed: "مكتمل",
+      progress: "التقدم",
+      purchase: "شراء الدورة",
+      purchased: "تم الشراء",
+      ctaTitle: "جاهز لتطوير مهاراتك؟",
+      ctaSubtitle: "دوراتنا المصغرة مثالية للمحترفين المشغولين",
+      ctaButton: "ابدأ اليوم",
+      features: "ما ستتعلمه:",
+    },
+  }[language]
+
+  const isRTL = language === "ar"
+
+  // باقي JSX ديالك بحالو، فقط غير هاد الجزء باش تعرض الفيديوهات
+  const renderCourseVideos = (course: Course) => {
+    return courseVideos.map((video: CourseVideo, index: number) => {
+      const isUnlocked = isMounted ? videoTracker.isVideoUnlocked(course.id, index) : index === 0
+      const videoProgress = videoProgresses[index]
+
+      return (
+        <div key={index} className="space-y-2">
+          <div className="flex items-center justify-between">
+            <h4 className="font-medium text-gray-900">Video {index + 1}</h4>
+            {videoProgress?.completed && <CheckCircle className="h-5 w-5 text-green-500" />}
+          </div>
+          <div className="border rounded-xl overflow-hidden">
+            <YouTubePlayer
+              videoUrl={video.url}
+              isLocked={!isUnlocked}
+              title={`${course.title} - Video ${index + 1}`}
+              courseId={course.id}
+              videoIndex={index}
+              onUnlock={() => handlePurchase(course.id)}
+            />
+          </div>
+        </div>
+      )
+    })
+  }
+
+  // كمل JSX ديالك من بعد على هاد الأساس
+
+  return (
+    <div>
+      {/* باقي JSX ديالك هنا */}
+>>>>>>> 82081f5 (update V3)
       {currentVideoUrl && (
         <VideoPreviewModal
           isOpen={showVideoModal}
