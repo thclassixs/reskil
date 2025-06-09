@@ -1,0 +1,3 @@
+[submodule "reskil-backend"]
+	path = reskil-backend
+	url = https://github.com/thclassixs/reskil-backend
