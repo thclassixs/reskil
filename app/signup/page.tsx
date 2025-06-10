@@ -55,7 +55,7 @@ export default function SignupPage() {
     if (!formData.agreeToTerms) return "You must agree to the terms of service"
     return null
   }
-
+  //console.log("API_BASE_URL:", API_BASE_URL);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")

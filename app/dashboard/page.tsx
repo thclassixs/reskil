@@ -1,25 +1,25 @@
 // app/dashboard/page.tsx
 "use client"
 
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/contexts/auth-context'
 import { redirect } from 'next/navigation'
 import DashboardStats from '@/components/dashboard-stats'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect, useState } from 'react'
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession({
-    required: false ,
-    onUnauthenticated() {
-      redirect('/login')
-    }
-  })
-
+  const { user, isAuthenticated, loading } = useAuth()
   const [recentActivity, setRecentActivity] = useState([
     { id: 1, description: "Started the 'React Development Bootcamp'", date: "2024-08-01" },
     { id: 2, description: "Completed 'Shopify Store Mastery'", date: "2024-07-25" },
     { id: 3, description: "Reviewed 'AI Automation for Business'", date: "2024-07-20" },
-  ]);
+  ])
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      redirect('/login')
+    }
+  }, [loading, isAuthenticated])
 
   useEffect(() => {
     // Simulate fetching recent activity from an API
@@ -37,7 +37,7 @@ export default function DashboardPage() {
     fetchRecentActivity();
   }, []);
 
-  if (status === 'loading') {
+  if (loading || !isAuthenticated) {
     return <div>Loading...</div>
   }
 
@@ -45,7 +45,7 @@ export default function DashboardPage() {
     <div className="container mx-auto py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-semibold text-gray-900">
-          Welcome back, {session?.user?.name}
+          Welcome back, {user?.name}
         </h1>
         <p className="text-gray-600">Here's what's happening with your learning today</p>
       </div>
@@ -68,5 +68,5 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

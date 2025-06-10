@@ -3,7 +3,7 @@
 import type React from "react"
 import { useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { useMaintenanceMode } from "@/lib/maintenance-service"
+import { useMaintenanceMode } from "@/contexts/maintenance-service"
 
 interface MaintenanceGuardProps {
   children: React.ReactNode

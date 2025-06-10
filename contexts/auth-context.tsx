@@ -1,7 +1,8 @@
+// contexts/auth-context.tsx
 "use client"
 
 import { createContext, useContext, useState, useEffect, useCallback } from "react"
-import api from './api'
+import api from '../services/api'
 
 interface User {
   id: string
@@ -50,11 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
   const [loginLoading, setLoginLoading] = useState(false)
   const [signupLoading, setSignupLoading] = useState(false)
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
-  if (!API_BASE_URL) {
-    throw new Error("NEXT_PUBLIC_API_URL environment variable is not defined")
-  }
-
+  
   // Token management
   const getToken = useCallback((): string | null => {
     if (typeof window === 'undefined') return null
@@ -82,29 +79,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Initial auth check
   useEffect(() => {
     checkAuth()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   const login = async ({ email, password, remember = false }: LoginParams): Promise<AuthResponse> => {
     setLoginLoading(true)
     try {
+      console.log('🔑 Attempting login for:', email)
+      
       const { data } = await api.post('/auth/login', { email, password })
+      
+      console.log('📥 Login response:', data)
       
       if (data.token && data.user) {
         setToken(data.token, remember)
         setUser(data.user)
         setIsAuthenticated(true)
+        console.log('✅ Login successful')
         return { success: true }
       }
 
       return {
         success: false,
-        message: 'Invalid response from server'
+        message: data.message || 'Invalid response from server'
       }
-    } catch (error) {
-      console.error('Login error:', error)
+    } catch (error: any) {
+      console.error('🚨 Login error:', error)
       return {
         success: false,
-        message: 'Network error occurred'
+        message: error.response?.data?.message || 'Login failed'
       }
     } finally {
       setLoginLoading(false)
@@ -114,29 +116,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = async ({ name, email, password, role }: SignupParams): Promise<AuthResponse> => {
     setSignupLoading(true)
     try {
-      const { data } = await api.post('/auth/register', { 
+      console.log('📝 Attempting signup for:', { name, email, role })
+      console.log('🌐 API Base URL:', api.defaults.baseURL)
+      
+      const { data } = await api.post('/auth/signup', { 
         name, 
         email, 
         password,
         role
       })
 
-      if (!data.success) {
+      console.log('📥 Signup response:', data)
+
+      if (data.success) {
+        console.log('✅ Signup successful')
         return {
-          success: false,
-          message: data.message || 'Signup failed'
+          success: true,
+          message: data.message || 'Account created successfully'
         }
       }
 
       return {
-        success: true,
-        message: data.message
+        success: false,
+        message: data.message || 'Signup failed'
       }
-    } catch (error) {
-      console.error('Signup error:', error)
+    } catch (error: any) {
+      console.error('🚨 Signup error:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        url: error.config?.url
+      })
+      
       return {
         success: false,
-        message: 'Network error occurred'
+        message: error.response?.data?.message || 'Signup failed'
       }
     } finally {
       setSignupLoading(false)
@@ -152,6 +166,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       removeToken()
       setUser(null)
       setIsAuthenticated(false)
+      console.log('👋 User logged out')
     }
   }
 
@@ -169,12 +184,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (data.user) {
         setUser(data.user)
         setIsAuthenticated(true)
+        console.log('✅ Auth check passed')
         return true
       }
 
       throw new Error('Invalid user data')
     } catch (error) {
-      console.error('Auth check error:', error)
+      console.error('❌ Auth check failed:', error)
       removeToken()
       setUser(null)
       setIsAuthenticated(false)

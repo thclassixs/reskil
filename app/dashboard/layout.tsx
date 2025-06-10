@@ -1,6 +1,6 @@
 // app/dashboard/layout.tsx
 import { Inter } from 'next/font/google'
-import { cn } from '@/lib/utils'
+import { cn } from '@/contexts/utils'
 import DashboardSidebar from '@/components/dashboard-sidebar'
 
 const inter = Inter({ subsets: ['latin'] })

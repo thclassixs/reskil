@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BookOpen, Clock, Award, Trophy } from "lucide-react"
-import api from "@/lib/api"
+import api from "@/services/api"
 
 interface DashboardStats {
   coursesInProgress: number

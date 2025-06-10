@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Wrench, Clock, Mail, ArrowLeft } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { useMaintenanceMode } from "@/lib/maintenance-service"
+import { useMaintenanceMode } from "@/contexts/maintenance-service"
 import { useRouter } from "next/navigation"
 
 interface MaintenanceConfig {

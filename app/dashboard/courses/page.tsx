@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
-import api from "@/lib/api"
+import api from "@/services/api"
 import { EnhancedButton } from "@/components/ui/enhanced-button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
