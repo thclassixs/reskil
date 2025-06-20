@@ -1,0 +1,403 @@
+{
+  "courses": [
+    {
+      "course": "Driving",
+      "content": {
+        "en": {
+          "intro": "Learning to drive is not just about steering the car; it's about understanding traffic rules, vehicle control, and reacting quickly in different situations.",
+          "sections": [
+            "Basic traffic laws and regulations.",
+            "Proper steering techniques and vehicle handling.",
+            "Importance of seat belts and safety measures.",
+            "Driving in various weather conditions like rain and fog.",
+            "How to perform a vehicle safety inspection before driving.",
+            "Understanding road signs and signals.",
+            "Safe overtaking and lane changing practices.",
+            "Parking techniques and rules.",
+            "Dealing with emergencies on the road."
+          ],
+          "quiz": [
+            {
+              "question": "What is the speed limit inside most cities?",
+              "options": ["30 km/h", "50 km/h", "70 km/h", "90 km/h"],
+              "answer": "50 km/h"
+            },
+            {
+              "question": "What should you do when you see a stop sign?",
+              "options": ["Slow down", "Stop completely", "Ignore it", "Speed up"],
+              "answer": "Stop completely"
+            },
+            {
+              "question": "Why is it important to check your vehicle before driving?",
+              "options": [
+                "To save fuel",
+                "To ensure safety",
+                "To make the car look clean",
+                "No need to check"
+              ],
+              "answer": "To ensure safety"
+            }
+          ]
+        },
+        "fr": {
+          "intro": "Apprendre à conduire ne consiste pas seulement à diriger la voiture ; il s'agit de comprendre les règles de circulation, le contrôle du véhicule et de réagir rapidement dans différentes situations.",
+          "sections": [
+            "Lois et règlements de circulation de base.",
+            "Techniques de direction et de maniement du véhicule.",
+            "Importance des ceintures de sécurité et des mesures de sécurité.",
+            "Conduite par divers temps comme la pluie et le brouillard.",
+            "Comment effectuer une inspection de sécurité du véhicule avant de conduire.",
+            "Comprendre les panneaux et signaux routiers.",
+            "Pratiques sûres de dépassement et de changement de voie.",
+            "Techniques et règles de stationnement.",
+            "Gérer les urgences sur la route."
+          ],
+          "quiz": [
+            {
+              "question": "Quelle est la limite de vitesse dans la plupart des villes ?",
+              "options": ["30 km/h", "50 km/h", "70 km/h", "90 km/h"],
+              "answer": "50 km/h"
+            },
+            {
+              "question": "Que devez-vous faire lorsque vous voyez un panneau stop ?",
+              "options": ["Ralentir", "S'arrêter complètement", "L'ignorer", "Accélérer"],
+              "answer": "S'arrêter complètement"
+            },
+            {
+              "question": "Pourquoi est-il important de vérifier votre véhicule avant de conduire ?",
+              "options": [
+                "Pour économiser du carburant",
+                "Pour assurer la sécurité",
+                "Pour que la voiture soit propre",
+                "Pas besoin de vérifier"
+              ],
+              "answer": "Pour assurer la sécurité"
+            }
+          ]
+        },
+        "ar": {
+          "intro": "تعلم السياقة ليس مجرد توجيه السيارة؛ إنه فهم قوانين المرور، التحكم بالمركبة، والتصرف بسرعة في مختلف الحالات.",
+          "sections": [
+            "القوانين واللوائح الأساسية للسير.",
+            "تقنيات التوجيه والتحكم في السيارة.",
+            "أهمية حزام الأمان وإجراءات السلامة.",
+            "السياقة في ظروف الطقس المختلفة مثل المطر والضباب.",
+            "كيفية فحص السيارة قبل القيادة.",
+            "فهم إشارات الطريق.",
+            "ممارسات آمنة للتجاوز وتغيير المسارات.",
+            "تقنيات وقواعد الركن.",
+            "التعامل مع حالات الطوارئ على الطريق."
+          ],
+          "quiz": [
+            {
+              "question": "ما هي السرعة المسموح بها داخل معظم المدن؟",
+              "options": ["30 كم/س", "50 كم/س", "70 كم/س", "90 كم/س"],
+              "answer": "50 كم/س"
+            },
+            {
+              "question": "ماذا يجب أن تفعل عندما ترى إشارة توقف؟",
+              "options": ["تبطيء", "تتوقف تماماً", "تتجاهل", "تسرع"],
+              "answer": "تتوقف تماماً"
+            },
+            {
+              "question": "لماذا من المهم فحص سيارتك قبل القيادة؟",
+              "options": [
+                "لتوفير الوقود",
+                "لضمان السلامة",
+                "لجعل السيارة نظيفة",
+                "لا حاجة للفحص"
+              ],
+              "answer": "لضمان السلامة"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "course": "Restaurants",
+      "content": {
+        "en": {
+          "intro": "Managing a successful restaurant requires strong communication skills, organization, and excellent customer service.",
+          "sections": [
+            "Basics of restaurant management and operations.",
+            "Organizing kitchen workflow efficiently.",
+            "Effective customer service and handling complaints.",
+            "Maintaining food safety and hygiene standards.",
+            "Marketing strategies to attract more customers.",
+            "Inventory management and ordering supplies.",
+            "Staff training and motivation.",
+            "Managing finances and budgeting.",
+            "Creating a welcoming atmosphere."
+          ],
+          "quiz": [
+            {
+              "question": "What is the most important food safety practice?",
+              "options": [
+                "Keeping food at the right temperature",
+                "Regular hand washing",
+                "Proper food storage",
+                "All of the above"
+              ],
+              "answer": "All of the above"
+            },
+            {
+              "question": "How should you handle an angry customer?",
+              "options": [
+                "Ignore them",
+                "Listen and empathize",
+                "Argue back",
+                "Ask them to leave"
+              ],
+              "answer": "Listen and empathize"
+            },
+            {
+              "question": "Why is staff training important in restaurants?",
+              "options": [
+                "To improve customer service",
+                "To reduce mistakes",
+                "To comply with health regulations",
+                "All of the above"
+              ],
+              "answer": "All of the above"
+            }
+          ]
+        },
+        "fr": {
+          "intro": "Gérer un restaurant à succès nécessite de solides compétences en communication, organisation et un excellent service client.",
+          "sections": [
+            "Bases de la gestion et des opérations de restaurant.",
+            "Organisation efficace du flux de travail en cuisine.",
+            "Service client efficace et gestion des plaintes.",
+            "Maintien des normes de sécurité alimentaire et d'hygiène.",
+            "Stratégies marketing pour attirer plus de clients.",
+            "Gestion des stocks et commandes.",
+            "Formation et motivation du personnel.",
+            "Gestion financière et budgétisation.",
+            "Création d'une ambiance accueillante."
+          ],
+          "quiz": [
+            {
+              "question": "Quelle est la pratique la plus importante en sécurité alimentaire ?",
+              "options": [
+                "Maintenir les aliments à la bonne température",
+                "Se laver régulièrement les mains",
+                "Stockage adéquat des aliments",
+                "Toutes les réponses"
+              ],
+              "answer": "Toutes les réponses"
+            },
+            {
+              "question": "Comment gérer un client en colère ?",
+              "options": [
+                "L'ignorer",
+                "Écouter et empathiser",
+                "Répondre par la dispute",
+                "Demander de partir"
+              ],
+              "answer": "Écouter et empathiser"
+            },
+            {
+              "question": "Pourquoi la formation du personnel est-elle importante dans les restaurants ?",
+              "options": [
+                "Pour améliorer le service client",
+                "Pour réduire les erreurs",
+                "Pour respecter les règles sanitaires",
+                "Toutes les réponses"
+              ],
+              "answer": "Toutes les réponses"
+            }
+          ]
+        },
+        "ar": {
+          "intro": "إدارة مطعم ناجح تتطلب مهارات تواصل قوية، تنظيم، وخدمة زبائن ممتازة.",
+          "sections": [
+            "أساسيات إدارة وتشغيل المطاعم.",
+            "تنظيم سير العمل في المطبخ بشكل فعال.",
+            "خدمة زبائن فعالة والتعامل مع الشكاوى.",
+            "الحفاظ على معايير السلامة الغذائية والنظافة.",
+            "استراتيجيات التسويق لجذب المزيد من الزبائن.",
+            "إدارة المخزون وطلبات التوريد.",
+            "تدريب وتحفيز الموظفين.",
+            "إدارة المالية والميزانية.",
+            "خلق جو ترحيبي."
+          ],
+          "quiz": [
+            {
+              "question": "ما هي أهم ممارسات السلامة الغذائية؟",
+              "options": [
+                "الحفاظ على الطعام في درجة الحرارة المناسبة",
+                "غسل اليدين بانتظام",
+                "تخزين الطعام بشكل صحيح",
+                "جميع ما سبق"
+              ],
+              "answer": "جميع ما سبق"
+            },
+            {
+              "question": "كيف تتعامل مع زبون غاضب؟",
+              "options": [
+                "تجاهل",
+                "الاستماع والتعاطف",
+                "الرد بالجدال",
+                "طلب المغادرة"
+              ],
+              "answer": "الاستماع والتعاطف"
+            },
+            {
+              "question": "لماذا تدريب الموظفين مهم في المطاعم؟",
+              "options": [
+                "لتحسين خدمة الزبائن",
+                "لتقليل الأخطاء",
+                "للالتزام بالقوانين الصحية",
+                "جميع ما سبق"
+              ],
+              "answer": "جميع ما سبق"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "course": "Freelance",
+      "content": {
+        "en": {
+          "intro": "Freelancing offers flexibility and the chance to work on diverse projects, but it requires skills in time management, client communication, and self-promotion.",
+          "sections": [
+            "Understanding freelance platforms and how to choose the right one.",
+            "Creating a strong portfolio to showcase your skills.",
+            "Effective communication with clients.",
+            "Setting fair pricing and managing payments.",
+            "Time management and meeting deadlines.",
+            "Building long-term client relationships.",
+            "Marketing yourself and finding new clients.",
+            "Handling contracts and legal issues.",
+            "Continuous learning and skill development."
+          ],
+          "quiz": [
+            {
+              "question": "What is essential for a strong freelance portfolio?",
+              "options": [
+                "Variety of projects",
+                "Clear presentation",
+                "Client testimonials",
+                "All of the above"
+              ],
+              "answer": "All of the above"
+            },
+            {
+              "question": "How should you handle missed deadlines?",
+              "options": [
+                "Ignore the client",
+                "Communicate immediately and explain",
+                "Blame others",
+                "Stop working"
+              ],
+              "answer": "Communicate immediately and explain"
+            },
+            {
+              "question": "Why is continuous learning important for freelancers?",
+              "options": [
+                "To keep skills updated",
+                "To stay competitive",
+                "To offer better services",
+                "All of the above"
+              ],
+              "answer": "All of the above"
+            }
+          ]
+        },
+        "fr": {
+          "intro": "Le freelancing offre flexibilité et diversité de projets, mais nécessite des compétences en gestion du temps, communication client et autopromotion.",
+          "sections": [
+            "Comprendre les plateformes freelance et choisir la bonne.",
+            "Créer un portfolio solide pour montrer ses compétences.",
+            "Communication efficace avec les clients.",
+            "Fixer des prix justes et gérer les paiements.",
+            "Gestion du temps et respect des délais.",
+            "Construire des relations clients durables.",
+            "Se marketer et trouver de nouveaux clients.",
+            "Gérer les contrats et aspects légaux.",
+            "Apprentissage continu et développement des compétences."
+          ],
+          "quiz": [
+            {
+              "question": "Qu'est-ce qui est essentiel pour un portfolio freelance solide ?",
+              "options": [
+                "Variété de projets",
+                "Présentation claire",
+                "Témoignages clients",
+                "Toutes les réponses"
+              ],
+              "answer": "Toutes les réponses"
+            },
+            {
+              "question": "Comment gérer les délais manqués ?",
+              "options": [
+                "Ignorer le client",
+                "Communiquer immédiatement et expliquer",
+                "Blâmer les autres",
+                "Arrêter de travailler"
+              ],
+              "answer": "Communiquer immédiatement et expliquer"
+            },
+            {
+              "question": "Pourquoi l'apprentissage continu est-il important pour les freelances ?",
+              "options": [
+                "Pour garder ses compétences à jour",
+                "Pour rester compétitif",
+                "Pour offrir de meilleurs services",
+                "Toutes les réponses"
+              ],
+              "answer": "Toutes les réponses"
+            }
+          ]
+        },
+        "ar": {
+          "intro": "العمل الحر يمنحك المرونة وفرصة للعمل على مشاريع متنوعة، لكنه يتطلب مهارات في إدارة الوقت، التواصل مع العملاء، والترويج لنفسك.",
+          "sections": [
+            "فهم منصات العمل الحر وكيف تختار الأنسب.",
+            "إنشاء ملف أعمال قوي لعرض مهاراتك.",
+            "التواصل الفعال مع العملاء.",
+            "تحديد أسعار عادلة وإدارة المدفوعات.",
+            "إدارة الوقت والالتزام بالمواعيد النهائية.",
+            "بناء علاقات طويلة الأمد مع العملاء.",
+            "تسويق نفسك وإيجاد عملاء جدد.",
+            "التعامل مع العقود والمسائل القانونية.",
+            "التعلم المستمر وتطوير المهارات."
+          ],
+          "quiz": [
+            {
+              "question": "ما الذي يجعل ملف الأعمال في العمل الحر قوياً؟",
+              "options": [
+                "تنوع المشاريع",
+                "عرض واضح",
+                "شهادات العملاء",
+                "جميع ما سبق"
+              ],
+              "answer": "جميع ما سبق"
+            },
+            {
+              "question": "كيف تتعامل مع تأخير تسليم العمل؟",
+              "options": [
+                "تجاهل العميل",
+                "التواصل الفوري والشرح",
+                "لوم الآخرين",
+                "التوقف عن العمل"
+              ],
+              "answer": "التواصل الفوري والشرح"
+            },
+            {
+              "question": "لماذا التعلم المستمر مهم للعاملين الحر؟",
+              "options": [
+                "لتحديث المهارات",
+                "للبقاء تنافسيًا",
+                "لتقديم خدمات أفضل",
+                "جميع ما سبق"
+              ],
+              "answer": "جميع ما سبق"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

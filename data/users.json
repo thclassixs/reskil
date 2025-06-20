@@ -1,0 +1,58 @@
+[
+  {
+    "id": "u001",
+    "name": "Hamza El Amrani",
+    "email": "hamza@reskil.com",
+    "password": "reskil_123",
+    "role": "student",
+    "domain": "Driving",
+    "language": "ar",
+    "progress": {
+      "Driving": {
+        "completedSections": [0, 1],
+        "quizScores": {
+          "q1": 80,
+          "q2": 100
+        }
+      }
+    },
+    "createdAt": "2025-06-10T10:00:00Z"
+  },
+  {
+    "id": "u002",
+    "name": "Claire Dubois",
+    "email": "claire@reskil.com",
+    "password": "reskil_456",
+    "role": "instructor",
+    "domain": "Freelance",
+    "language": "fr",
+    "createdAt": "2025-06-09T14:30:00Z"
+  },
+  {
+    "id": "u003",
+    "name": "John Smith",
+    "email": "john@reskil.com",
+    "password": "reskil_789",
+    "role": "student",
+    "domain": "Restaurant",
+    "language": "en",
+    "progress": {
+      "Restaurant": {
+        "completedSections": [0],
+        "quizScores": {
+          "q1": 60
+        }
+      }
+    },
+    "createdAt": "2025-06-11T08:20:00Z"
+  },
+  {
+    "id": "u004",
+    "name": "Admin User",
+    "email": "admin@reskil.com",
+    "password": "admin123",
+    "role": "admin",
+    "language": "en",
+    "createdAt": "2025-06-01T00:00:00Z"
+  }
+]

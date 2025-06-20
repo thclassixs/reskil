@@ -1,8 +1,7 @@
-// components/dashboard-stats.tsx
+"use client"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BookOpen, Clock, Award, Trophy } from "lucide-react"
-import api from "@/services/api"
 
 interface DashboardStats {
   coursesInProgress: number
@@ -23,8 +22,21 @@ export default function DashboardStats() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const { data } = await api.get('/admin/stats')
-        setStats(data)
+        // ✅ MOCK DATA INSTEAD OF API
+        const mockStats: DashboardStats = {
+          coursesInProgress: 4,
+          totalHours: 27,
+          certificatesEarned: 3,
+          achievementPoints: 380,
+          monthlyProgress: {
+            courses: 1,
+            hours: 6,
+            certificates: 1
+          }
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 500)) // simulate delay
+        setStats(mockStats)
       } catch (error) {
         console.error('Failed to fetch dashboard stats:', error)
       } finally {
@@ -35,13 +47,8 @@ export default function DashboardStats() {
     fetchStats()
   }, [])
 
-  if (loading) {
-    return <div>Loading stats...</div>
-  }
-
-  if (!stats) {
-    return <div>Failed to load stats</div>
-  }
+  if (loading) return <div>Loading stats...</div>
+  if (!stats) return <div>Failed to load stats</div>
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -100,9 +107,7 @@ export default function DashboardStats() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.achievementPoints}</div>
-          <p className="text-xs text-muted-foreground">
-            +120 points this week
-          </p>
+          <p className="text-xs text-muted-foreground">+120 points this week</p>
           <div className="mt-4 h-2 w-full rounded-full bg-blue-100">
             <div className="h-2 w-2/3 rounded-full bg-blue-600" />
           </div>

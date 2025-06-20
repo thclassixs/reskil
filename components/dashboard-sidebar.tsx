@@ -1,4 +1,3 @@
-// components/dashboard-sidebar.tsx
 "use client"
 
 import { useState, useEffect } from 'react'
@@ -21,7 +20,9 @@ import {
   Trophy,
   Calendar,
   HelpCircle,
-  Star
+  Star,
+  Bookmark,
+  AlertCircle
 } from 'lucide-react'
 
 const sidebarLinks = [
@@ -29,14 +30,15 @@ const sidebarLinks = [
     title: 'Dashboard',
     href: '/dashboard',
     icon: LayoutDashboard,
-    description: 'Overview & Analytics'
+    description: 'Courses & Updates',
+    badge: '3'
   },
   {
-    title: 'My Courses',
-    href: '/dashboard/courses',
-    icon: BookOpen,
-    description: 'Learning Progress',
-    badge: '5'
+    title: 'Quiz',
+    href: '/dashboard/quiz',
+    icon: Trophy,
+    description: 'Tests & Assessments',
+    badge: '2'
   },
   {
     title: 'Messages',
@@ -53,18 +55,16 @@ const sidebarLinks = [
     description: 'Connect & Collaborate'
   },
   {
-    title: 'Achievements',
-    href: '/dashboard/achievements',
-    icon: Trophy,
-    description: 'Your Progress',
-    badge: '2',
-    isNew: true
-  },
-  {
     title: 'Profile',
     href: '/dashboard/profile',
     icon: UserCircle,
     description: 'Account Settings'
+  },
+  {
+    title: 'Bookmarks',
+    href: '/dashboard/bookmarks',
+    icon: Bookmark,
+    description: 'Saved Content'
   }
 ]
 
@@ -73,6 +73,12 @@ const bottomLinks = [
     title: 'Help Center',
     href: '/dashboard/help',
     icon: HelpCircle
+  },
+  {
+    title: 'Announcements',
+    href: '/dashboard/announcements',
+    icon: AlertCircle,
+    badge: '1'
   }
 ]
 
@@ -124,7 +130,8 @@ export default function DashboardSidebar() {
         <nav className="px-4 space-y-2">
           {sidebarLinks.map((link) => {
             const Icon = link.icon
-            const isActive = pathname === link.href
+            const isActive = pathname === link.href || 
+                           (link.href !== '/dashboard' && pathname?.startsWith(link.href))
 
             return (
               <div key={link.href} className="relative group">
@@ -158,11 +165,6 @@ export default function DashboardSidebar() {
                           </div>
                           
                           <div className="flex items-center space-x-2">
-                            {link.isNew && (
-                              <span className="px-2 py-0.5 text-xs font-semibold bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full">
-                                NEW
-                              </span>
-                            )}
                             {link.badge && (
                               <span className={cn(
                                 "flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold",
@@ -221,6 +223,11 @@ export default function DashboardSidebar() {
                     {!collapsed && (
                       <>
                         <span className="ml-3 flex-1 text-left text-sm">{link.title}</span>
+                        {link.badge && (
+                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-600 text-xs">
+                            {link.badge}
+                          </span>
+                        )}
                       </>
                     )}
                   </Button>
@@ -230,6 +237,7 @@ export default function DashboardSidebar() {
                 {collapsed && (
                   <div className="absolute left-16 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-1 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 whitespace-nowrap">
                     {link.title}
+                    {link.badge && ` (${link.badge} new)`}
                   </div>
                 )}
               </div>
@@ -269,15 +277,6 @@ export default function DashboardSidebar() {
           </Button>
         </Link>
       </div>
-
-      {/* Resize handle */}
-      <div 
-        className="absolute right-0 top-0 w-1 h-full cursor-col-resize hover:bg-blue-500 transition-colors opacity-0 hover:opacity-100"
-        onMouseDown={(e) => {
-          e.preventDefault()
-          // Add resize functionality here if needed
-        }}
-      />
     </div>
   )
 }

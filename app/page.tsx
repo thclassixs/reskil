@@ -507,7 +507,7 @@ export default function LandingPage() {
               {t.nav.home}
             </button>
             <Link
-              href="/courses"
+              href="dashboard/courses"
               className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg"
               onClick={() => setMobileMenuOpen(false)}
             >
@@ -574,7 +574,7 @@ export default function LandingPage() {
                 <Play className="mr-2 h-5 w-5" />
                 {t.hero.cta2}
               </EnhancedButton>
-              <Link href="/courses">
+              <Link href="dashboard/courses">
                 <EnhancedButton variant="secondary" size="lg" className="px-8 py-4 text-lg">
                   {t.hero.exploreBtn}
                 </EnhancedButton>
@@ -930,7 +930,7 @@ export default function LandingPage() {
               <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/courses" className="text-gray-400 hover:text-white text-sm transition-colors">
+                  <Link href="dashboard/courses" className="text-gray-400 hover:text-white text-sm transition-colors">
                     {t.footer.links.courses}
                   </Link>
                 </li>

@@ -1,8 +1,7 @@
-// contexts/auth-context.tsx
 "use client"
 
 import { createContext, useContext, useState, useEffect, useCallback } from "react"
-import api from '../services/api'
+import users from "@/data/users.json"
 
 interface User {
   id: string
@@ -21,7 +20,6 @@ interface AuthResponse {
 interface LoginParams {
   email: string
   password: string
-  remember?: boolean
 }
 
 interface SignupParams {
@@ -51,146 +49,127 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
   const [loginLoading, setLoginLoading] = useState(false)
   const [signupLoading, setSignupLoading] = useState(false)
-  
-  // Token management
-  const getToken = useCallback((): string | null => {
+
+  const getToken = useCallback(() => {
     if (typeof window === 'undefined') return null
-    return localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+    return localStorage.getItem("accessToken")
   }, [])
 
-  const setToken = useCallback((token: string, remember: boolean = false): void => {
+  const setToken = useCallback((token: string) => {
     if (typeof window === 'undefined') return
-    
-    if (remember) {
-      localStorage.setItem("accessToken", token)
-      sessionStorage.removeItem("accessToken")
-    } else {
-      sessionStorage.setItem("accessToken", token)
-      localStorage.removeItem("accessToken")
-    }
+    localStorage.setItem("accessToken", token)
   }, [])
 
-  const removeToken = useCallback((): void => {
+  const removeToken = useCallback(() => {
     if (typeof window === 'undefined') return
     localStorage.removeItem("accessToken")
-    sessionStorage.removeItem("accessToken")
   }, [])
 
-  // Initial auth check
+  const simulateApiCall = (data: any, delay = 500) =>
+    new Promise(resolve => setTimeout(() => resolve(data), delay))
+
   useEffect(() => {
     checkAuth()
   }, [])
 
-  const login = async ({ email, password, remember = false }: LoginParams): Promise<AuthResponse> => {
+  const login = async ({ email, password }: LoginParams): Promise<AuthResponse> => {
     setLoginLoading(true)
     try {
-      console.log('🔑 Attempting login for:', email)
-      
-      const { data } = await api.post('/auth/login', { email, password })
-      
-      console.log('📥 Login response:', data)
-      
-      if (data.token && data.user) {
-        setToken(data.token, remember)
-        setUser(data.user)
-        setIsAuthenticated(true)
-        console.log('✅ Login successful')
-        return { success: true }
-      }
+      const foundUser = users.find(u => u.email === email && u.password === password)
 
-      return {
-        success: false,
-        message: data.message || 'Invalid response from server'
+      if (foundUser) {
+        const token = `mock-token-${foundUser.id}-${Date.now()}`
+        const userData: User = {
+          id: foundUser.id,
+          name: foundUser.name,
+          email: foundUser.email,
+          role: foundUser.role
+        }
+
+        await simulateApiCall({ success: true })
+        setToken(token)
+        setUser(userData)
+        setIsAuthenticated(true)
+        return { success: true, token, user: userData }
+      } else {
+        await simulateApiCall({ success: false })
+        return { success: false, message: "Email ou mot de passe incorrect" }
       }
-    } catch (error: any) {
-      console.error('🚨 Login error:', error)
-      return {
-        success: false,
-        message: error.response?.data?.message || 'Login failed'
-      }
+    } catch (err) {
+      return { success: false, message: "Erreur inconnue" }
     } finally {
       setLoginLoading(false)
     }
   }
 
-  const signup = async ({ name, email, password, role }: SignupParams): Promise<AuthResponse> => {
+  const signup = async ({ name, email, password, role = "student" }: SignupParams): Promise<AuthResponse> => {
     setSignupLoading(true)
     try {
-      console.log('📝 Attempting signup for:', { name, email, role })
-      console.log('🌐 API Base URL:', api.defaults.baseURL)
-      
-      const { data } = await api.post('/auth/signup', { 
-        name, 
-        email, 
+      const exists = users.some(u => u.email === email)
+      if (exists) {
+        await simulateApiCall(null)
+        return { success: false, message: "Utilisateur existe déjà" }
+      }
+
+      const newUser = {
+        id: `u${String(users.length + 1).padStart(3, "0")}`,
+        name,
+        email,
         password,
-        role
-      })
-
-      console.log('📥 Signup response:', data)
-
-      if (data.success) {
-        console.log('✅ Signup successful')
-        return {
-          success: true,
-          message: data.message || 'Account created successfully'
-        }
+        role,
+        domain: role === "student" ? "Driving" : undefined,
+        language: "en",
+        progress: {},
+        createdAt: new Date().toISOString()
       }
 
-      return {
-        success: false,
-        message: data.message || 'Signup failed'
-      }
-    } catch (error: any) {
-      console.error('🚨 Signup error:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status,
-        url: error.config?.url
-      })
-      
-      return {
-        success: false,
-        message: error.response?.data?.message || 'Signup failed'
-      }
+      console.log("🆕 Utilisateur enregistré:", newUser)
+      ;(users as any).push(newUser) // non persistant
+
+      await simulateApiCall(null)
+      return { success: true, message: "Compte créé avec succès" }
+    } catch (err) {
+      return { success: false, message: "Erreur lors de la création" }
     } finally {
       setSignupLoading(false)
     }
   }
 
-  const logout = async (): Promise<void> => {
-    try {
-      await api.get('/auth/logout')
-    } catch (error) {
-      console.error('Logout request failed:', error)
-    } finally {
-      removeToken()
-      setUser(null)
-      setIsAuthenticated(false)
-      console.log('👋 User logged out')
-    }
+  const logout = async () => {
+    await simulateApiCall(null)
+    removeToken()
+    setUser(null)
+    setIsAuthenticated(false)
   }
 
   const checkAuth = async (): Promise<boolean> => {
     const token = getToken()
-    
     if (!token) {
       setLoading(false)
       return false
     }
 
     try {
-      const { data } = await api.get('/auth/me')
-      
-      if (data.user) {
-        setUser(data.user)
+      const match = token.match(/mock-token-(u\d{3})-/)
+      const id = match?.[1]
+      const found = users.find(u => u.id === id)
+
+      if (found) {
+        const userData: User = {
+          id: found.id,
+          name: found.name,
+          email: found.email,
+          role: found.role
+        }
+
+        await simulateApiCall(null)
+        setUser(userData)
         setIsAuthenticated(true)
-        console.log('✅ Auth check passed')
         return true
       }
 
-      throw new Error('Invalid user data')
-    } catch (error) {
-      console.error('❌ Auth check failed:', error)
+      throw new Error("Invalid token")
+    } catch (err) {
       removeToken()
       setUser(null)
       setIsAuthenticated(false)
@@ -217,37 +196,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 export function useAuth() {
   const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
-  }
+  if (!context) throw new Error("useAuth must be used within AuthProvider")
   return context
-}
-
-export function useAuthenticatedFetch() {
-  const authenticatedFetch = async (
-    url: string,
-    options: { 
-      method?: string;
-      body?: any;
-      headers?: Record<string, string>;
-    } = {}
-  ) => {
-    const { method = 'GET', body, headers = {} } = options;
-    
-    try {
-      const response = await api.request({
-        url,
-        method,
-        data: body,
-        headers
-      });
-      
-      return response.data;
-    } catch (error) {
-      console.error('API request failed:', error);
-      throw error;
-    }
-  }
-
-  return authenticatedFetch
 }

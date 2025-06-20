@@ -11,12 +11,12 @@ import { MessageSquare, ThumbsUp, Eye, TrendingUp, Search } from "lucide-react"
 const MOCK_DISCUSSIONS = [
   {
     id: '1',
-    title: 'How to structure a React application for scalability?',
+    title: 'How to structure a Restaurants application for scalability?',
     author: {
       name: 'Alex Johnson',
       avatar: '/avatars/hamza.webp',
     },
-    category: 'React',
+    category: 'Restaurants',
     replies: 23,
     views: 156,
     likes: 45,
@@ -30,7 +30,7 @@ const MOCK_DISCUSSIONS = [
       name: 'Sarah Wilson',
       avatar: '/avatars/mouad.webp',
     },
-    category: 'E-commerce',
+    category: 'Freelance',
     replies: 15,
     views: 98,
     likes: 32,
@@ -44,7 +44,7 @@ const MOCK_DISCUSSIONS = [
       name: 'Mike Brown',
       avatar: '/avatars/rida.webp',
     },
-    category: 'Digital Marketing',
+    category: 'Driving',
     replies: 18,
     views: 120,
     likes: 28,
@@ -55,11 +55,9 @@ const MOCK_DISCUSSIONS = [
 
 const categories = [
   { name: 'All', count: 156 },
-  { name: 'React', count: 45 },
-  { name: 'E-commerce', count: 38 },
-  { name: 'Digital Marketing', count: 29 },
-  { name: 'UI/UX Design', count: 24 },
-  { name: 'AI & Automation', count: 20 },
+  { name: 'Restaurants', count: 45 },
+  { name: 'Freelance', count: 38 },
+  { name: 'Driving', count: 29 },
 ]
 
 export default function CommunityPage() {

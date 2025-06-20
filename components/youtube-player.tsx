@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react"
 import { Lock, AlertCircle, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { videoTracker } from "@/services/video-tracking"
 
 interface YouTubePlayerProps {
   videoUrl: string
@@ -48,11 +47,7 @@ export function YouTubePlayer({
   useEffect(() => {
     // Load existing progress only on client side
     if (isMounted && courseId !== undefined && showProgress) {
-      const existingProgress = videoTracker.getVideoProgress(courseId, videoIndex)
-      if (existingProgress) {
-        setProgress(existingProgress.progress)
-        setIsCompleted(existingProgress.completed)
-      }
+      
     }
   }, [courseId, videoIndex, showProgress, isMounted])
 
@@ -77,10 +72,6 @@ export function YouTubePlayer({
       progressIntervalRef.current = setInterval(() => {
         setProgress((prev) => {
           const newProgress = Math.min(100, prev + 2) // Simulate 2% every second
-
-          if (courseId !== undefined) {
-            videoTracker.updateVideoProgress(courseId, videoIndex, newProgress)
-          }
 
           if (newProgress >= 90 && !isCompleted) {
             setIsCompleted(true)

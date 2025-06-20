@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
@@ -17,8 +18,6 @@ import {
 } from "lucide-react"
 import { YouTubePlayer } from "@/components/youtube-player"
 import { VideoPreviewModal } from "@/components/video-preview-modal"
-import { getCourseVideos, getCoursePreviewVideo } from "@/services/course-videos"
-import { videoTracker } from "@/services/video-tracking" // Assuming this is correctly implemented
 
 type Language = "en" | "ar"
 
@@ -43,74 +42,80 @@ interface VideoProgress {
   completed: boolean
 }
 
+// ✅ Mock replacements for removed services
+const getCourseVideos = async (courseId: string): Promise<CourseVideo[]> => {
+  return [{ url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }]
+}
+
+const getCoursePreviewVideo = async (courseId: string): Promise<string | null> => {
+  return "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+}
+
+const videoTracker = {
+  getCourseProgress: (courseId: string) => 0,
+  getVideoProgress: async (courseId: string, index: number) => ({ completed: false }),
+  purchaseCourse: (courseId: string) => {},
+  isVideoUnlocked: (courseId: string, index: number) => true
+}
+
 export default function FreeCoursesPage() {
   const [language, setLanguage] = useState<Language>("en")
   const [showVideoModal, setShowVideoModal] = useState(false)
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | null>(null)
   const [currentCourseTitle, setCurrentCourseTitle] = useState<string>("")
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null)
-  const [courseProgress, setCourseProgress] = useState<Record<string, number>>({}) // Changed to number assuming it's a percentage
+  const [courseProgress, setCourseProgress] = useState<Record<string, number>>({})
   const [courseVideos, setCourseVideos] = useState<CourseVideo[]>([])
   const [videoProgresses, setVideoProgresses] = useState<Record<number, VideoProgress | null>>({})
   const [isMounted, setIsMounted] = useState(false)
 
-  // Memoize freeCourses to prevent re-creation on every render if language doesn't change
-  const freeCourses: Course[] = useMemo(
-    () => [
-      {
-        id: "shopify-starter",
-        title: language === "en" ? "Shopify Starter Kit" : "مجموعة بداية Shopify",
-        description:
-          language === "en"
-            ? "Learn the basics of setting up and running a Shopify store"
-            : "تعلم أساسيات إعداد وإدارة متجر Shopify",
-        price: language === "en" ? "$29" : "290 درهم",
-        originalPrice: language === "en" ? "$49" : "490 درهم",
-        duration: language === "en" ? "2 hours" : "ساعتان",
-        level: language === "en" ? "Beginner" : "مبتدئ",
-        category: language === "en" ? "E-commerce" : "التجارة الإلكترونية",
-        features:
-          language === "en"
-            ? ["Store Setup", "Product Management", "Payment Processing", "Basic Marketing", "Order Fulfillment"]
-            : ["إعداد المتجر", "إدارة المنتجات", "معالجة المدفوعات", "التسويق الأساسي", "تنفيذ الطلبات"],
-      },
-      {
-        id: "tiktok-ads-mini",
-        title: language === "en" ? "TikTok Ads Mini Course" : "دورة إعلانات TikTok المصغرة",
-        description:
-          language === "en"
-            ? "Quick introduction to creating effective TikTok ad campaigns"
-            : "مقدمة سريعة لإنشاء حملات إعلانية فعالة على TikTok",
-        price: language === "en" ? "$19" : "190 درهم",
-        originalPrice: language === "en" ? "$39" : "390 درهم",
-        duration: language === "en" ? "1.5 hours" : "ساعة ونصف",
-        level: language === "en" ? "Beginner" : "مبتدئ",
-        category: language === "en" ? "Marketing" : "التسويق",
-        features:
-          language === "en"
-            ? ["Ad Creation", "Targeting Strategies", "Budget Optimization", "Performance Tracking"]
-            : ["إنشاء الإعلومات", "استراتيجيات الاستهداف", "تحسين الميزانية", "تتبع الأداء"],
-      },
-      {
-        id: "intro-ai-prompting",
-        title: language === "en" ? "Intro to AI Prompting" : "مقدمة في كتابة الأوامر للذكاء الاصطناعي",
-        description:
-          language === "en"
-            ? "Learn the fundamentals of crafting effective prompts for AI tools"
-            : "تعلم أساسيات صياغة الأوامر الفعالة لأدوات الذكاء الاصطناعي",
-        price: language === "en" ? "$24" : "240 درهم",
-        originalPrice: language === "en" ? "$44" : "440 درهم",
-        duration: language === "en" ? "2 hours" : "ساعتان",
-        level: language === "en" ? "Beginner" : "مبتدئ",
-        category: language === "en" ? "AI & Automation" : "الذكاء الاصطناعي والأتمتة",
-        features:
-          language === "en"
-            ? ["Prompt Engineering", "AI Tool Selection", "Workflow Integration", "Best Practices"]
-            : ["هندسة الأوامر", "اختيار أدوات الذكاء الاصطناعي", "تكامل سير العمل", "أفضل الممارسات"],
-      },
-    ],
-    [language]
-  )
+  const freeCourses: Course[] = useMemo(() => [
+    {
+      id: "shopify-starter",
+      title: language === "en" ? "Shopify Starter Kit" : "مجموعة بداية Shopify",
+      description: language === "en"
+        ? "Learn the basics of setting up and running a Shopify store"
+        : "تعلم أساسيات إعداد وإدارة متجر Shopify",
+      price: language === "en" ? "$29" : "290 درهم",
+      originalPrice: language === "en" ? "$49" : "490 درهم",
+      duration: language === "en" ? "2 hours" : "ساعتان",
+      level: language === "en" ? "Beginner" : "مبتدئ",
+      category: language === "en" ? "E-commerce" : "التجارة الإلكترونية",
+      features: language === "en"
+        ? ["Store Setup", "Product Management", "Payment Processing", "Basic Marketing", "Order Fulfillment"]
+        : ["إعداد المتجر", "إدارة المنتجات", "معالجة المدفوعات", "التسويق الأساسي", "تنفيذ الطلبات"],
+    },
+    {
+      id: "tiktok-ads-mini",
+      title: language === "en" ? "TikTok Ads Mini Course" : "دورة إعلانات TikTok المصغرة",
+      description: language === "en"
+        ? "Quick introduction to creating effective TikTok ad campaigns"
+        : "مقدمة سريعة لإنشاء حملات إعلانية فعالة على TikTok",
+      price: language === "en" ? "$19" : "190 درهم",
+      originalPrice: language === "en" ? "$39" : "390 درهم",
+      duration: language === "en" ? "1.5 hours" : "ساعة ونصف",
+      level: language === "en" ? "Beginner" : "مبتدئ",
+      category: language === "en" ? "Marketing" : "التسويق",
+      features: language === "en"
+        ? ["Ad Creation", "Targeting Strategies", "Budget Optimization", "Performance Tracking"]
+        : ["إنشاء الإعلانات", "استراتيجيات الاستهداف", "تحسين الميزانية", "تتبع الأداء"],
+    },
+    {
+      id: "intro-ai-prompting",
+      title: language === "en" ? "Intro to AI Prompting" : "مقدمة في كتابة الأوامر للذكاء الاصطناعي",
+      description: language === "en"
+        ? "Learn the fundamentals of crafting effective prompts for AI tools"
+        : "تعلم أساسيات صياغة الأوامر الفعالة لأدوات الذكاء الاصطناعي",
+      price: language === "en" ? "$24" : "240 درهم",
+      originalPrice: language === "en" ? "$44" : "440 درهم",
+      duration: language === "en" ? "2 hours" : "ساعتان",
+      level: language === "en" ? "Beginner" : "مبتدئ",
+      category: language === "en" ? "AI & Automation" : "الذكاء الاصطناعي والأتمتة",
+      features: language === "en"
+        ? ["Prompt Engineering", "AI Tool Selection", "Workflow Integration", "Best Practices"]
+        : ["هندسة الأوامر", "اختيار أدوات الذكاء الاصطناعي", "تكامل سير العمل", "أفضل الممارسات"],
+    }
+  ], [language])
 
   useEffect(() => {
     setIsMounted(true)
@@ -118,20 +123,17 @@ export default function FreeCoursesPage() {
 
   useEffect(() => {
     if (!isMounted) return
-
     const updateProgress = () => {
       const progress: Record<string, number> = {}
       freeCourses.forEach((course) => {
-        // Ensure getCourseProgress returns a number, default to 0 if null/undefined
         progress[course.id] = videoTracker.getCourseProgress(course.id) || 0
       })
       setCourseProgress(progress)
     }
-
     updateProgress()
     const interval = setInterval(updateProgress, 3000)
     return () => clearInterval(interval)
-  }, [isMounted, freeCourses]) // Added freeCourses to dependencies
+  }, [isMounted, freeCourses])
 
   useEffect(() => {
     const fetchVideosAndProgress = async () => {
@@ -145,7 +147,6 @@ export default function FreeCoursesPage() {
       }
       setVideoProgresses(progresses)
     }
-
     fetchVideosAndProgress()
   }, [expandedCourse, isMounted])
 
@@ -157,7 +158,7 @@ export default function FreeCoursesPage() {
     videoTracker.purchaseCourse(courseId)
     setCourseProgress((prev) => ({
       ...prev,
-      [courseId]: videoTracker.getCourseProgress(courseId) || 0, // Default to 0
+      [courseId]: videoTracker.getCourseProgress(courseId) || 0
     }))
     alert(language === "en" ? "Course purchased successfully!" : "تم شراء الدورة بنجاح!")
   }
@@ -209,7 +210,7 @@ export default function FreeCoursesPage() {
       ctaSubtitle: "دوراتنا المصغرة مثالية للمحترفين المشغولين",
       ctaButton: "ابدأ اليوم",
       features: "ما ستتعلمه:",
-    },
+    }
   }[language]
 
   const isRTL = language === "ar"
@@ -219,8 +220,7 @@ export default function FreeCoursesPage() {
       return <p>{language === "en" ? "Loading videos..." : "جاري تحميل الفيديوهات..."}</p>
     }
 
-    return courseVideos.map((video: CourseVideo, index: number) => {
-      // isMounted check is redundant here, videoTracker.isVideoUnlocked should handle locked/unlocked state
+    return courseVideos.map((video, index) => {
       const isUnlocked = videoTracker.isVideoUnlocked(course.id, index)
       const videoProgress = videoProgresses[index]
 
@@ -272,21 +272,16 @@ export default function FreeCoursesPage() {
                     <div className="grid grid-cols-2 gap-2 mb-4 text-sm text-gray-700 dark:text-gray-300">
                       <div className="flex items-center gap-2">
                         <Clock className="h-4 w-4" />
-                        <span>
-                          {t.duration}: {course.duration}
-                        </span>
+                        <span>{t.duration}: {course.duration}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Star className="h-4 w-4" />
-                        <span>
-                          {t.level}: {course.level}
-                        </span>
+                        <span>{t.level}: {course.level}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Globe className="h-4 w-4" />
                         <span>
-                          {t.price}:{" "}
-                          <span className="font-semibold text-lg">
+                          {t.price}: <span className="font-semibold text-lg">
                             {course.price}
                             {course.originalPrice && (
                               <span className="line-through text-gray-500 ml-2">{course.originalPrice}</span>
@@ -298,14 +293,12 @@ export default function FreeCoursesPage() {
                         <Badge variant="secondary">{course.category}</Badge>
                       </div>
                     </div>
-                    <div>
-                      <h3 className="font-semibold mb-2">{t.features}</h3>
-                      <ul className="list-disc list-inside text-gray-700 dark:text-gray-300">
-                        {course.features.map((feature, index) => (
-                          <li key={index}>{feature}</li>
-                        ))}
-                      </ul>
-                    </div>
+                    <h3 className="font-semibold mb-2">{t.features}</h3>
+                    <ul className="list-disc list-inside text-gray-700 dark:text-gray-300">
+                      {course.features.map((feature, index) => (
+                        <li key={index}>{feature}</li>
+                      ))}
+                    </ul>
                     <div className="flex gap-4 mt-6">
                       <EnhancedButton onClick={() => handlePurchase(course.id)} className="flex-1">
                         <ShoppingCart className="mr-2 h-4 w-4" />
