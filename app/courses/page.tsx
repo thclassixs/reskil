@@ -14,7 +14,7 @@ export default function CoursesPage() {
       category: "Dropshipping Course",
       description: "60+ Hours of Content",
       learners: "40 Learners & Resellers",
-      icon: "/products/ecom.png",
+      icon: "/products/ecom.svg",
       alt: "ECOM PRODIGY"
     },
     {
@@ -23,7 +23,7 @@ export default function CoursesPage() {
       category: "SMMA Course",
       description: "45 Hours of Content",
       learners: "12 Learners & Resellers",
-      icon: "/products/blueprint.png",
+      icon: "/products/blueprint.svg",
       alt: "AGENCY BLUEPRINT"
     },
     {
@@ -32,7 +32,7 @@ export default function CoursesPage() {
       category: "Amazon FBA Course",
       description: "61 Hours of Content",
       learners: "55 Learners & Resellers",
-      icon: "/products/amazon.png",
+      icon: "/products/amazon.svg",
       alt: "AMAZON DROPSHIP PRO"
     },
     {
@@ -41,7 +41,7 @@ export default function CoursesPage() {
       category: "Remote Closing Course",
       description: "41 Hours of Content",
       learners: "7 Learners & Resellers",
-      icon: "/products/sixfigure.png",
+      icon: "/products/sixfigure.svg",
       alt: "SIX FIGURE CLOSER"
     },
     {
@@ -50,7 +50,7 @@ export default function CoursesPage() {
       category: "Done-For-You Community",
       description: "Pre-Built Community",
       learners: "200+ Member Community",
-      icon: "/products/academy.png",
+      icon: "/products/academy.svg",
       alt: "ENTREPRENEURS ACADEMY"
     },
     {
@@ -59,7 +59,7 @@ export default function CoursesPage() {
       category: "Youtube Automation Course",
       description: "71 Hours of Content",
       learners: "75 Learners & Resellers",
-      icon: "/products/youtube.png",
+      icon: "/products/youtube.svg",
       alt: "GHOST CREATOR"
     },
     {
@@ -68,7 +68,7 @@ export default function CoursesPage() {
       category: "Day Trading Course",
       description: "71 Hours of Content",
       learners: "30 Learners & Resellers",
-      icon: "/products/market.png",
+      icon: "/products/market.svg",
       alt: "MARKET MASTERY"
     },
     {
@@ -77,7 +77,7 @@ export default function CoursesPage() {
       category: "Copywriting Course",
       description: "48 Hours of Content",
       learners: "22 Learners & Resellers",
-      icon: "/products/copywriting.png",
+      icon: "/products/copywriting.svg",
       alt: "COPYWRITING CATALYST"
     },
     {
@@ -86,7 +86,7 @@ export default function CoursesPage() {
       category: "Instagram Theme Page Course",
       description: "52 Hours of Content",
       learners: "20 Learners & Resellers",
-      icon: "/products/moneygram.png",
+      icon: "/products/moneygram.svg",
       alt: "MONEY GRAM"
     }
   ];
