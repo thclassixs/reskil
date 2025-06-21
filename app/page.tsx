@@ -164,7 +164,7 @@ export default function LandingPage() {
               <img 
                   src="/REL.png"
                   alt="ResKil" 
-                  className="h-15 w-auto" // Adjust height as needed
+                  className="h-8 w-auto" // Adjust height as needed
                 />
               </a>
             </div>
