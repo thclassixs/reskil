@@ -1,7 +1,7 @@
 // app/courses/page.tsx
 "use client";
 
-import { CheckCircle, ArrowRight } from "lucide-react";
+import { CheckCircle, ArrowRight, Users, Clock } from "lucide-react";
 import Link from "next/link";
 import Head from 'next/head';
 
@@ -9,63 +9,57 @@ export default function CoursesPage() {
   const courses = [
     {
       id: "ecom-prodigy",
-      title: "ECOM PRODIGY",
-      description: "Ecommerce Mastery Course",
-      features: [
-        "60+ Lessons",
-        "8 Masterclass Videos",
-        "Ecommerce Headquarters Access"
-      ]
+      title: "Ecom Prodigy",
+      category: "Dropshipping Course",
+      description: "60+ Hours of Content",
+      learners: "40 Learners & Resellers",
+      icon: "ECOM",
+      color: "bg-blue-100 text-blue-800"
     },
     {
       id: "agency-blueprint",
-      title: "AGENCY BLUEPRINT",
-      description: "Digital Agency Course",
-      features: [
-        "90+ Lessons",
-        "5 Masterclass Videos",
-        "3 Case Studies"
-      ]
+      title: "Agency Blueprint",
+      category: "SMMA Course",
+      description: "45 Hours of Content",
+      learners: "12 Learners & Resellers",
+      icon: "AGENCY",
+      color: "bg-purple-100 text-purple-800"
     },
     {
       id: "dropship-pro",
-      title: "DROPSHIP PRO",
-      description: "Amazon Dropshipping Course",
-      features: [
-        "10+ Lessons",
-        "2 Masterclass Videos",
-        "Supplier Database"
-      ]
+      title: "Amazon Dropship Pro",
+      category: "Amazon FBA Course",
+      description: "61 Hours of Content",
+      learners: "55 Learners & Resellers",
+      icon: "DROPSHIP",
+      color: "bg-green-100 text-green-800"
     },
     {
       id: "six-figure-closer",
-      title: "SIX-FIGURE CLOSER®",
-      description: "Sales Mastery Program",
-      features: [
-        "7 Week Training",
-        "7 Masterclass Videos",
-        "Premium Resources"
-      ]
+      title: "Six Figure Closer",
+      category: "Remote Closing Course",
+      description: "41 Hours of Content",
+      learners: "7 Learners & Resellers",
+      icon: "SIX-FIGURE",
+      color: "bg-red-100 text-red-800"
     },
     {
       id: "entrepreneur-academy",
-      title: "ENTREPRENEUR ACADEMY",
-      description: "Business Growth Community",
-      features: [
-        "Private Network",
-        "200+ Member Community",
-        "Weekly Masterminds"
-      ]
+      title: "Entrepreneurs Academy",
+      category: "Done-For-You Community",
+      description: "Pre-Built Community",
+      learners: "200+ Member Community",
+      icon: "ENTREPRENEURS",
+      color: "bg-yellow-100 text-yellow-800"
     },
     {
       id: "ghost-creator",
-      title: "GHOST CREATOR",
-      description: "Automation Course",
-      features: [
-        "7 Week Program",
-        "7 Implementation Guides",
-        "Automation Templates"
-      ]
+      title: "Ghost Creator",
+      category: "Youtube Automation Course",
+      description: "71 Hours of Content",
+      learners: "75 Learners & Resellers",
+      icon: "GHOST",
+      color: "bg-indigo-100 text-indigo-800"
     }
   ];
 
@@ -116,28 +110,39 @@ export default function CoursesPage() {
       </section>
 
       {/* Courses Grid */}
-      <section className="py-20 bg-background">
+      <section className="py-12 bg-background">
         <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {courses.map((course) => (
-              <div key={course.id} className="bg-background border border-border rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="text-2xl font-bold mb-2 text-primary">{course.title}</h3>
-                <p className="text-muted-foreground mb-6">{course.description}</p>
+              <div key={course.id} className="bg-background border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`${course.color} w-12 h-12 rounded-lg flex items-center justify-center font-bold`}>
+                    {course.icon}
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs text-muted-foreground">Your Company Products</span>
+                  </div>
+                </div>
                 
-                <ul className="space-y-3 mb-8">
-                  {course.features.map((feature, i) => (
-                    <li key={i} className="flex items-center">
-                      <CheckCircle className="text-green-500 mr-3 flex-shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+                <h3 className="text-xl font-bold mb-1">{course.title}</h3>
+                <p className="text-muted-foreground text-sm mb-4">{course.category}</p>
+                
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="flex items-center text-sm">
+                    <Users className="w-4 h-4 mr-1 text-muted-foreground" />
+                    <span>{course.learners}</span>
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <Clock className="w-4 h-4 mr-1 text-muted-foreground" />
+                    <span>{course.description}</span>
+                  </div>
+                </div>
 
                 <Link
                   href={`/courses/${course.id}`}
-                  className="btn-theme w-full py-3 px-6"
+                  className="btn-theme w-full py-2 px-4 flex items-center justify-center mt-4"
                 >
-                  View Course <ArrowRight className="ml-2" />
+                  View Course <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>
               </div>
             ))}
