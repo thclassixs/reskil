@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,32 +8,31 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Globe, ArrowLeft, Eye, EyeOff, Mail, Lock, User, CheckCircle, Loader2, AlertCircle } from "lucide-react"
-
-type Language = "en" | "ar"
+import { ArrowLeft, Eye, EyeOff, Mail, Lock, User, CheckCircle, Loader2, AlertCircle, CreditCard, Calendar, Phone, DollarSign } from "lucide-react"
 
 export default function SignupPage() {
-  const [language, setLanguage] = useState<Language>("en")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false) // Used for overall form submission, including payment simulation
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "", // Consolidated from firstName and lastName
     email: "",
+    phoneNumber: "",
     password: "",
     confirmPassword: "",
     agreeToTerms: false,
     subscribeNewsletter: true,
+    // Payment fields
+    cardNumber: "",
+    expiryDate: "", // MM/YY
+    cvc: "",
+    cardHolderName: ""
   })
 
+  // This will be undefined in the Canvas environment but kept for context.
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
-
-  const toggleLanguage = () => {
-    setLanguage(language === "en" ? "ar" : "en")
-  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -42,24 +40,31 @@ export default function SignupPage() {
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     })
-    if (error) setError("")
+    if (error) setError("") // Clear error on input change
   }
 
   const validateForm = () => {
-    if (!formData.firstName.trim()) return "First name is required"
-    if (!formData.lastName.trim()) return "Last name is required"
-    if (!formData.email.trim()) return "Email is required"
-    if (!formData.email.includes("@")) return "Please enter a valid email"
-    if (formData.password.length < 6) return "Password must be at least 6 characters"
-    if (formData.password !== formData.confirmPassword) return "Passwords do not match"
-    if (!formData.agreeToTerms) return "You must agree to the terms of service"
+    if (!formData.fullName.trim()) return "Full name is required."
+    if (!formData.email.trim()) return "Email is required."
+    if (!formData.email.includes("@") || !formData.email.includes(".")) return "Please enter a valid email address."
+    if (!formData.phoneNumber.trim()) return "Phone number is required."
+    if (formData.password.length < 6) return "Password must be at least 6 characters."
+    if (formData.password !== formData.confirmPassword) return "Passwords do not match."
+    if (!formData.agreeToTerms) return "You must agree to the terms of service."
+
+    // Payment validation
+    if (!formData.cardHolderName.trim()) return "Card holder name is required."
+    if (!/^\d{16}$/.test(formData.cardNumber.replace(/\s/g, ''))) return "Card number must be 16 digits."
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(formData.expiryDate)) return "Expiry date must be in MM/YY format."
+    if (!/^\d{3,4}$/.test(formData.cvc)) return "CVC must be 3 or 4 digits."
+
     return null
   }
-  //console.log("API_BASE_URL:", API_BASE_URL);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
-    
+
     const validationError = validateForm()
     if (validationError) {
       setError(validationError)
@@ -69,128 +74,131 @@ export default function SignupPage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+      // Step 1: Simulate payment processing
+      console.log("Simulating payment...")
+      await new Promise(resolve => setTimeout(resolve, 2000)) // Simulate network delay for payment
+
+      const paymentSuccess = true; // Placeholder for actual payment gateway result
+      if (!paymentSuccess) {
+        throw new Error("Payment failed. Please check your details or try another method.")
+      }
+      console.log("Payment simulation successful.")
+
+      // Step 2: Proceed with account creation API call
+      console.log("Attempting account creation...")
+      const response = await fetch(`${API_BASE_URL || 'https://api.example.com'}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
         body: JSON.stringify({
-          name: `${formData.firstName} ${formData.lastName}`,
+          name: formData.fullName, // Use fullName for the name field
           email: formData.email.toLowerCase(),
+          phoneNumber: formData.phoneNumber,
           password: formData.password,
-          role: "STUDENT"
+          role: "STUDENT",
+          paymentDetails: {
+            cardNumber: "************" + formData.cardNumber.replace(/\s/g, '').slice(-4),
+            expiryDate: formData.expiryDate,
+            cvc: "***",
+            cardHolderName: formData.cardHolderName
+          }
         }),
       })
 
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || "Signup failed")
+        throw new Error(data.message || "Account creation failed. Please try again.")
       }
 
       setSuccess(true)
-      
+      console.log("Account created successfully:", data)
+
       if (data.data?.accessToken) {
         localStorage.setItem("accessToken", data.data.accessToken)
       }
-      
+
     } catch (err) {
-      console.error("Signup error:", err)
-      setError(err instanceof Error ? err.message : "An error occurred during signup")
+      console.error("Signup/Payment error:", err)
+      setError(err instanceof Error ? err.message : "An unexpected error occurred during signup.")
     } finally {
       setIsLoading(false)
     }
   }
 
-  const content = {
-    en: {
-      title: "Create Your Account",
-      subtitle: "Join thousands of students transforming their careers",
-      form: {
-        firstName: "First Name",
-        lastName: "Last Name",
-        email: "Email Address",
-        password: "Password",
-        confirmPassword: "Confirm Password",
-        agreeToTerms: "I agree to the Terms of Service and Privacy Policy",
-        subscribeNewsletter: "Subscribe to our newsletter for updates and tips",
-        createAccount: "Create Account",
-        creating: "Creating Account...",
-        firstNamePlaceholder: "Enter your first name",
-        lastNamePlaceholder: "Enter your last name",
-        emailPlaceholder: "Enter your email address",
-        passwordPlaceholder: "Create a strong password",
-        confirmPasswordPlaceholder: "Confirm your password",
-      },
-      benefits: {
-        title: "Why Join Reskil?",
-        items: [
-          "Access to 50+ premium courses",
-          "Learn from industry experts",
-          "Get job-ready skills",
-          "Join a supportive community",
-          "Lifetime access to content",
-          "Certificate of completion",
-        ],
-      },
-      login: {
-        text: "Already have an account?",
-        link: "Sign in",
-      },
-      success: "Account created successfully! Welcome to Reskil!",
+  // Simplified content object directly for English
+  const t = {
+    title: "Create Your Account & Get Started",
+    subtitle: "Unlock your potential with Reskil's premium courses. Secure your access today!",
+    form: {
+      fullName: "Full Name",
+      email: "Email Address",
+      phoneNumber: "Phone Number",
+      password: "Password",
+      confirmPassword: "Confirm Password",
+      agreeToTerms: "I agree to the Terms of Service and Privacy Policy",
+      subscribeNewsletter: "Subscribe to our newsletter for updates and tips",
+      createAccount: "Pay & Create Account",
+      creating: "Processing & Creating...",
+      fullNamePlaceholder: "Enter your full name",
+      emailPlaceholder: "Enter your email address",
+      phoneNumberPlaceholder: "e.g., +1234567890",
+      passwordPlaceholder: "Create a strong password",
+      confirmPasswordPlaceholder: "Confirm your password",
+      paymentDetails: "Payment Information",
+      cardHolderName: "Card Holder Name",
+      cardHolderNamePlaceholder: "John Doe",
+      cardNumber: "Card Number",
+      cardNumberPlaceholder: "•••• •••• •••• ••••",
+      expiryDate: "Expiry Date (MM/YY)",
+      expiryDatePlaceholder: "MM/YY",
+      cvc: "CVC",
+      cvcPlaceholder: "•••",
     },
-    ar: {
-      title: "أنشئ حسابك",
-      subtitle: "انضم لآلاف الطلاب الذين يحولون مسيراتهم المهنية",
-      form: {
-        firstName: "الاسم الأول",
-        lastName: "اسم العائلة",
-        email: "عنوان البريد الإلكتروني",
-        password: "كلمة المرور",
-        confirmPassword: "تأكيد كلمة المرور",
-        agreeToTerms: "أوافق على شروط الخدمة وسياسة الخصوصية",
-        subscribeNewsletter: "اشترك في نشرتنا الإخبارية للحصول على التحديثات والنصائح",
-        createAccount: "إنشاء حساب",
-        creating: "جاري إنشاء الحساب...",
-        firstNamePlaceholder: "أدخل اسمك الأول",
-        lastNamePlaceholder: "أدخل اسم عائلتك",
-        emailPlaceholder: "أدخل عنوان بريدك الإلكتروني",
-        passwordPlaceholder: "أنشئ كلمة مرور قوية",
-        confirmPasswordPlaceholder: "أكد كلمة المرور",
-      },
-      benefits: {
-        title: "لماذا تنضم إلى Reskil؟",
-        items: [
-          "الوصول لأكثر من 50 دورة مميزة",
-          "تعلم من خبراء الصناعة",
-          "احصل على مهارات جاهزة للعمل",
-          "انضم لمجتمع داعم",
-          "وصول مدى الحياة للمحتوى",
-          "شهادة إتمام",
-        ],
-      },
-      login: {
-        text: "لديك حساب بالفعل؟",
-        link: "سجل دخولك",
-      },
-      success: "تم إنشاء الحساب بنجاح! مرحباً بك في Reskil!",
+    // Benefits object is no longer used for rendering, but kept in 't' for consistency in case of future use.
+    benefits: {
+      title: "Why Join Reskil?",
+      items: [
+        "Access to 50+ premium courses",
+        "Learn from industry experts",
+        "Get job-ready skills",
+        "Join a supportive community",
+        "Lifetime access to content",
+        "Certificate of completion",
+      ],
     },
+    paymentSummary: {
+      title: "Order Summary",
+      productName: "Reskil All-Access",
+      price: "£49.00",
+      billingCycle: "per month",
+      description: "Instant Access to Reskil's full course library. Billed monthly.",
+      subtotal: "£49.00",
+      totalDueToday: "£49.00",
+      promoCode: "Add promo code"
+    },
+    login: {
+      text: "Already have an account?",
+      link: "Sign in",
+    },
+    success: "Account created and payment successful! Welcome to Reskil!",
   }
 
-  const t = content[language]
-  const isRTL = language === "ar"
+  // This variable is no longer explicitly used for calculations within the component
+  const PAYMENT_PLAN_PRICE = 49.00;
 
   if (success) {
     return (
-      <div className={`min-h-screen bg-gray-50 flex items-center justify-center ${isRTL ? "rtl" : "ltr"}`} dir={isRTL ? "rtl" : "ltr"}>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card className="max-w-md w-full mx-4">
           <CardContent className="p-8 text-center">
             <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Success!</h2>
             <p className="text-gray-600 mb-6">{t.success}</p>
-            <Button 
-              onClick={() => window.location.href = "/dashboard"} 
+            <Button
+              onClick={() => window.location.href = "/dashboard"}
               className="w-full bg-blue-600 hover:bg-blue-700"
             >
               Go to Dashboard
@@ -202,21 +210,17 @@ export default function SignupPage() {
   }
 
   return (
-    <div className={`min-h-screen bg-gray-50 ${isRTL ? "rtl" : "ltr"}`} dir={isRTL ? "rtl" : "ltr"}>
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <button onClick={() => window.history.back()} className="flex items-center">
-                <ArrowLeft className={`h-5 w-5 text-gray-600 ${isRTL ? "ml-2" : "mr-2"}`} />
+                <ArrowLeft className="h-5 w-5 text-gray-600 mr-2" />
                 <span className="text-2xl font-bold text-blue-600">Reskil</span>
               </button>
             </div>
-            <Button variant="outline" size="sm" onClick={toggleLanguage} className="flex items-center space-x-2">
-              <Globe className="h-4 w-4" />
-              <span>{language === "en" ? "العربية" : "English"}</span>
-            </Button>
           </div>
         </div>
       </header>
@@ -224,24 +228,128 @@ export default function SignupPage() {
       <div className="py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Left Side - Benefits */}
-            <div className="hidden lg:block">
-              <div className="sticky top-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">{t.benefits.title}</h2>
-                <div className="space-y-4">
-                  {t.benefits.items.map((benefit, index) => (
-                    <div key={index} className="flex items-center">
-                      <CheckCircle className={`h-5 w-5 text-green-500 ${isRTL ? "ml-3" : "mr-3"}`} />
-                      <span className="text-gray-700">{benefit}</span>
+            {/* Left Side - Payment Summary & Payment Information */}
+            <div className="lg:block p-8 bg-blue-600 text-white rounded-lg shadow-lg relative">
+              <div className="sticky top-8 space-y-8">
+                {/* Payment Summary */}
+                <Card className="bg-blue-600 text-white shadow-none border-none">
+                  <CardTitle className="text-2xl font-bold mb-4 flex items-center">
+                    <DollarSign className="h-6 w-6 mr-3" /> {t.paymentSummary.title}
+                  </CardTitle>
+                  <CardContent className="p-0 space-y-3">
+                    <div className="text-3xl font-extrabold mb-2">
+                      {t.paymentSummary.price}
+                      <span className="text-lg font-medium opacity-80 ml-2">{t.paymentSummary.billingCycle}</span>
                     </div>
-                  ))}
-                </div>
-                <div className="mt-8 p-6 bg-blue-50 rounded-lg">
-                  <h3 className="font-semibold text-gray-900 mb-2">Start Learning Today</h3>
-                  <p className="text-gray-600 text-sm">
-                    Join our community and get instant access to beginner-friendly courses.
-                  </p>
-                </div>
+                    <p className="text-blue-100 mb-4">{t.paymentSummary.productName}</p>
+                    <p className="text-blue-100 text-sm mb-6">{t.paymentSummary.description}</p>
+
+                    <div className="space-y-3 text-blue-100 border-t border-blue-400 pt-6 mt-6">
+                      <div className="flex justify-between items-center text-lg font-semibold">
+                        <span>Subtotal</span>
+                        <span>{t.paymentSummary.subtotal}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="text"
+                          placeholder={t.paymentSummary.promoCode}
+                          className="w-full p-2 bg-blue-700 border-blue-500 text-white placeholder-blue-200 rounded-md focus:ring-blue-300 focus:border-blue-300"
+                        />
+                        <Button className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md">Apply</Button>
+                      </div>
+                      <div className="flex justify-between items-center text-2xl font-bold pt-4 border-t border-blue-400">
+                        <span>Total due today</span>
+                        <span>{t.paymentSummary.totalDueToday}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Payment Information - Moved to the left column */}
+                <Card className="bg-blue-600 text-white shadow-none border-none">
+                  <CardHeader className="px-0 pt-0">
+                    <CardTitle className="text-lg font-semibold text-white mb-4">{t.form.paymentDetails}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="px-0 space-y-4">
+                    <div>
+                      <Label htmlFor="cardHolderName" className="text-blue-100">{t.form.cardHolderName}</Label>
+                      <div className="relative mt-1">
+                        <User className="absolute top-3 h-4 w-4 text-blue-200 left-3" />
+                        <Input
+                          id="cardHolderName"
+                          name="cardHolderName"
+                          type="text"
+                          placeholder={t.form.cardHolderNamePlaceholder}
+                          value={formData.cardHolderName}
+                          onChange={handleInputChange}
+                          required
+                          disabled={isLoading}
+                          className="pl-10 bg-blue-700 border-blue-500 text-white placeholder-blue-200 focus:ring-blue-300 focus:border-blue-300"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="cardNumber" className="text-blue-100">{t.form.cardNumber}</Label>
+                      <div className="relative mt-1">
+                        <CreditCard className="absolute top-3 h-4 w-4 text-blue-200 left-3" />
+                        <Input
+                          id="cardNumber"
+                          name="cardNumber"
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9\s]{13,19}"
+                          autoComplete="cc-number"
+                          placeholder={t.form.cardNumberPlaceholder}
+                          value={formData.cardNumber.replace(/\s?/g, '').replace(/(\d{4})/g, '$1 ').trim()}
+                          onChange={handleInputChange}
+                          required
+                          disabled={isLoading}
+                          className="pl-10 bg-blue-700 border-blue-500 text-white placeholder-blue-200 focus:ring-blue-300 focus:border-blue-300"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="expiryDate" className="text-blue-100">{t.form.expiryDate}</Label>
+                        <div className="relative mt-1">
+                          <Calendar className="absolute top-3 h-4 w-4 text-blue-200 left-3" />
+                          <Input
+                            id="expiryDate"
+                            name="expiryDate"
+                            type="text"
+                            inputMode="numeric"
+                            pattern="(0[1-9]|1[0-2])\/?([0-9]{2})"
+                            placeholder={t.form.expiryDatePlaceholder}
+                            value={formData.expiryDate}
+                            onChange={handleInputChange}
+                            required
+                            disabled={isLoading}
+                            className="pl-10 bg-blue-700 border-blue-500 text-white placeholder-blue-200 focus:ring-blue-300 focus:border-blue-300"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <Label htmlFor="cvc" className="text-blue-100">{t.form.cvc}</Label>
+                        <div className="relative mt-1">
+                          <Lock className="absolute top-3 h-4 w-4 text-blue-200 left-3" />
+                          <Input
+                            id="cvc"
+                            name="cvc"
+                            type="text"
+                            inputMode="numeric"
+                            pattern="\d{3,4}"
+                            placeholder={t.form.cvcPlaceholder}
+                            value={formData.cvc}
+                            onChange={handleInputChange}
+                            required
+                            disabled={isLoading}
+                            className="pl-10 bg-blue-700 border-blue-500 text-white placeholder-blue-200 focus:ring-blue-300 focus:border-blue-300"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
 
@@ -264,47 +372,30 @@ export default function SignupPage() {
                     )}
 
                     <div className="space-y-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="firstName">{t.form.firstName}</Label>
-                          <div className="relative mt-1">
-                            <User className={`absolute top-3 h-4 w-4 text-gray-400 ${isRTL ? "right-3" : "left-3"}`} />
-                            <Input
-                              id="firstName"
-                              name="firstName"
-                              type="text"
-                              placeholder={t.form.firstNamePlaceholder}
-                              value={formData.firstName}
-                              onChange={handleInputChange}
-                              required
-                              disabled={isLoading}
-                              className={isRTL ? "pr-10" : "pl-10"}
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <Label htmlFor="lastName">{t.form.lastName}</Label>
-                          <div className="relative mt-1">
-                            <User className={`absolute top-3 h-4 w-4 text-gray-400 ${isRTL ? "right-3" : "left-3"}`} />
-                            <Input
-                              id="lastName"
-                              name="lastName"
-                              type="text"
-                              placeholder={t.form.lastNamePlaceholder}
-                              value={formData.lastName}
-                              onChange={handleInputChange}
-                              required
-                              disabled={isLoading}
-                              className={isRTL ? "pr-10" : "pl-10"}
-                            />
-                          </div>
+                      {/* Personal Information */}
+                      <h3 className="text-lg font-semibold text-gray-900 pt-4">Personal Information</h3>
+                      <div>
+                        <Label htmlFor="fullName">{t.form.fullName}</Label>
+                        <div className="relative mt-1">
+                          <User className="absolute top-3 h-4 w-4 text-gray-400 left-3" />
+                          <Input
+                            id="fullName"
+                            name="fullName"
+                            type="text"
+                            placeholder={t.form.fullNamePlaceholder}
+                            value={formData.fullName}
+                            onChange={handleInputChange}
+                            required
+                            disabled={isLoading}
+                            className="pl-10"
+                          />
                         </div>
                       </div>
 
                       <div>
                         <Label htmlFor="email">{t.form.email}</Label>
                         <div className="relative mt-1">
-                          <Mail className={`absolute top-3 h-4 w-4 text-gray-400 ${isRTL ? "right-3" : "left-3"}`} />
+                          <Mail className="absolute top-3 h-4 w-4 text-gray-400 left-3" />
                           <Input
                             id="email"
                             name="email"
@@ -314,15 +405,35 @@ export default function SignupPage() {
                             onChange={handleInputChange}
                             required
                             disabled={isLoading}
-                            className={isRTL ? "pr-10" : "pl-10"}
+                            className="pl-10"
                           />
                         </div>
                       </div>
 
                       <div>
+                        <Label htmlFor="phoneNumber">{t.form.phoneNumber}</Label>
+                        <div className="relative mt-1">
+                          <Phone className="absolute top-3 h-4 w-4 text-gray-400 left-3" />
+                          <Input
+                            id="phoneNumber"
+                            name="phoneNumber"
+                            type="tel"
+                            placeholder={t.form.phoneNumberPlaceholder}
+                            value={formData.phoneNumber}
+                            onChange={handleInputChange}
+                            required
+                            disabled={isLoading}
+                            className="pl-10"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Account Security */}
+                      <h3 className="text-lg font-semibold text-gray-900 pt-4">Account Security</h3>
+                      <div>
                         <Label htmlFor="password">{t.form.password}</Label>
                         <div className="relative mt-1">
-                          <Lock className={`absolute top-3 h-4 w-4 text-gray-400 ${isRTL ? "right-3" : "left-3"}`} />
+                          <Lock className="absolute top-3 h-4 w-4 text-gray-400 left-3" />
                           <Input
                             id="password"
                             name="password"
@@ -332,13 +443,13 @@ export default function SignupPage() {
                             onChange={handleInputChange}
                             required
                             disabled={isLoading}
-                            className={isRTL ? "pr-10 pl-10" : "pl-10 pr-10"}
+                            className="pl-10 pr-10"
                           />
                           <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
                             disabled={isLoading}
-                            className={`absolute top-3 h-4 w-4 text-gray-400 hover:text-gray-600 ${isRTL ? "left-3" : "right-3"}`}
+                            className="absolute top-3 h-4 w-4 text-gray-400 hover:text-gray-600 right-3"
                           >
                             {showPassword ? <EyeOff /> : <Eye />}
                           </button>
@@ -348,7 +459,7 @@ export default function SignupPage() {
                       <div>
                         <Label htmlFor="confirmPassword">{t.form.confirmPassword}</Label>
                         <div className="relative mt-1">
-                          <Lock className={`absolute top-3 h-4 w-4 text-gray-400 ${isRTL ? "right-3" : "left-3"}`} />
+                          <Lock className="absolute top-3 h-4 w-4 text-gray-400 left-3" />
                           <Input
                             id="confirmPassword"
                             name="confirmPassword"
@@ -358,18 +469,28 @@ export default function SignupPage() {
                             onChange={handleInputChange}
                             required
                             disabled={isLoading}
-                            className={isRTL ? "pr-10 pl-10" : "pl-10 pr-10"}
+                            className="pl-10 pr-10"
                           />
                           <button
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                             disabled={isLoading}
-                            className={`absolute top-3 h-4 w-4 text-gray-400 hover:text-gray-600 ${isRTL ? "left-3" : "right-3"}`}
+                            className="absolute top-3 h-4 w-4 text-gray-400 hover:text-gray-600 right-3"
                           >
                             {showConfirmPassword ? <EyeOff /> : <Eye />}
                           </button>
                         </div>
                       </div>
+
+                      {/* Moved Payment Details Section to the left column */}
+                      {/* Original location:
+                      <div className="pt-4 border-t border-gray-200">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.form.paymentDetails}</h3>
+                        <div className="space-y-4">
+                          // ... payment fields ...
+                        </div>
+                      </div>
+                      */}
 
                       <div className="space-y-3">
                         <div className="flex items-center space-x-2">
@@ -401,7 +522,7 @@ export default function SignupPage() {
                         </div>
                       </div>
 
-                      <Button 
+                      <Button
                         type="submit"
                         disabled={isLoading}
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
@@ -420,8 +541,8 @@ export default function SignupPage() {
                     <div className="mt-6 text-center">
                       <p className="text-sm text-gray-600">
                         {t.login.text}{" "}
-                        <button 
-                          onClick={() => window.location.href = "/login"} 
+                        <button
+                          onClick={() => window.location.href = "/login"}
                           className="text-blue-600 hover:text-blue-700 font-medium"
                         >
                           {t.login.link}

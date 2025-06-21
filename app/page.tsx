@@ -1,496 +1,168 @@
+
 "use client"
 
-import { useState, useEffect } from "react"
-import { usePathname } from "next/navigation"
-import { EnhancedButton } from "@/components/ui/enhanced-button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { useState } from "react"
 import {
-  Star,
-  Play,
-  Users,
-  Shield,
-  CheckCircle,
-  Globe,
-  Target,
-  Award,
-  Clock,
-  ChevronDown,
-  ChevronUp,
-  Menu,
-  X,
-  ArrowRight,
+  Star, Play, CheckCircle, ChevronDown, ChevronUp, Menu, X, ArrowRight,
+  Users, Shield, Globe, Lightbulb, Zap, Film, TrendingUp, DollarSign,
+  Sparkles, Loader2
 } from "lucide-react"
-import Link from "next/link"
 
-type Language = "en" | "ar"
+interface CustomCSSProperties extends React.CSSProperties {
+  '--range-progress'?: string;
+}
 
 export default function LandingPage() {
-  const [language, setLanguage] = useState<Language>("en")
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const pathname = usePathname()
+  const [isYearlyPricing, setIsYearlyPricing] = useState(false)
+  const [resellPrice, setResellPrice] = useState(500)
+  const [monthlyStudents, setMonthlyStudents] = useState(20)
+  const [socialContentTopic, setSocialContentTopic] = useState("")
+  const [generatedSocialContent, setGeneratedSocialContent] = useState("")
+  const [isGeneratingContent, setIsGeneratingContent] = useState(false)
+  const [socialContentError, setSocialContentError] = useState("")
 
-  const toggleLanguage = () => {
-    setLanguage(language === "en" ? "ar" : "en")
-  }
+  const RESKIL_MONTHLY_INVESTMENT = 49.99
 
   const toggleAccordion = (index: number) => {
     setActiveAccordion(activeAccordion === index ? null : index)
   }
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" })
     setMobileMenuOpen(false)
   }
 
-  // Close mobile menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = () => {
-      setMobileMenuOpen(false)
-    }
+  const monthlyProfit = (resellPrice * monthlyStudents - RESKIL_MONTHLY_INVESTMENT).toFixed(2)
 
-    if (mobileMenuOpen) {
-      document.addEventListener("click", handleClickOutside)
-      return () => document.removeEventListener("click", handleClickOutside)
+  const generateSocialMediaContent = async () => {
+    if (!socialContentTopic.trim()) {
+      setSocialContentError("Please enter a topic to generate content.")
+      return
     }
-  }, [mobileMenuOpen])
+    setIsGeneratingContent(true)
+    setGeneratedSocialContent("")
+    setSocialContentError("")
 
-  const content = {
-    en: {
-      nav: {
-        home: "Home",
-        courses: "Courses",
-        freeCourses: "Free Courses",
-        pricing: "Pricing",
-        testimonials: "Reviews",
-        faq: "FAQ",
-        joinNow: "Join Now",
-      },
-      hero: {
-        badge: "🚀 Join 10,000+ Students",
-        title: "Master Digital Skills That Actually Pay",
-        subtitle:
-          "Learn ecommerce, AI, web development, and design with practical, no-fluff training. Get job-ready in weeks, not years.",
-        cta1: "Start Learning Today",
-        cta2: "Watch Preview",
-        exploreBtn: "Explore Courses",
-        stats: {
-          students: "10,000+ Students",
-          completion: "95% Completion Rate",
-          satisfaction: "4.9/5 Rating",
-        },
-      },
-      courses: {
-        title: "Choose Your Learning Path",
-        subtitle: "Flexible options designed for your schedule and budget",
-        starter: {
-          name: "Starter Course",
-          price: "$49",
-          description: "Perfect for beginners",
-          features: [
-            "5+ Hours of Video Content",
-            "Downloadable Resources",
-            "Community Access",
-            "Certificate of Completion",
-            "30-Day Money Back Guarantee",
-          ],
-          cta: "Get Started",
-        },
-        fullAccess: {
-          name: "Full Access Pass",
-          price: "$15/month",
-          description: "Best value for serious learners",
-          popular: "Most Popular",
-          features: [
-            "Access to ALL Courses",
-            "New Content Every Week",
-            "Live Q&A Sessions",
-            "Priority Support",
-            "Job Placement Assistance",
-            "Cancel Anytime",
-          ],
-          cta: "Start Free Trial",
-        },
-        private: {
-          name: "Private 1-on-1 Session",
-          price: "$29",
-          description: "Personalized mentoring",
-          features: [
-            "60-Minute Private Session",
-            "Personalized Learning Plan",
-            "Direct Mentor Access",
-            "Custom Project Review",
-            "Career Guidance",
-          ],
-          cta: "Book Session",
-        },
-      },
-      features: {
-        title: "Why Choose Reskil?",
-        subtitle: "We focus on practical skills that get you hired",
-        items: [
-          {
-            icon: Target,
-            title: "Job-Ready Skills",
-            description: "Learn exactly what employers want. No theory, just practical skills you can use immediately.",
-          },
-          {
-            icon: Clock,
-            title: "Learn at Your Pace",
-            description: "Flexible schedule that fits your life. Study when you want, where you want.",
-          },
-          {
-            icon: Users,
-            title: "Expert Mentors",
-            description: "Learn from industry professionals who've built successful careers in tech.",
-          },
-          {
-            icon: Award,
-            title: "Proven Results",
-            description: "95% of our students land jobs or increase their income within 6 months.",
-          },
-        ],
-      },
-      testimonials: {
-        title: "Success Stories",
-        subtitle: "Real results from real students",
-        items: [
-          {
-            name: "Mouad",
-            role: "Web Developer",
-            content: "Reskil's courses helped me transition from a traditional developer to a full-stack expert. The practical approach was exactly what I needed.",
-            rating: 5,
-          },
-          {
-            name: "Hamza",
-            role: "Web Developer",
-            content: "The web development course was comprehensive and practical. I landed my first developer job within 2 months of completing it.",
-            rating: 5,
-          },
-          {
-            name: "Imane",
-            role: "Frontend Developer",
-            content: "As a complete beginner, I was nervous about learning to code. Reskil's structured approach made the journey smooth and enjoyable.",
-            rating: 5,
-          },
-        ],
-      },
-      faq: {
-        title: "Frequently Asked Questions",
-        subtitle: "Everything you need to know about Reskil",
-        items: [
-          {
-            question: "How long does it take to complete a course?",
-            answer:
-              "Most courses can be completed in 2-4 weeks with 1-2 hours of daily study. You can go at your own pace.",
-          },
-          {
-            question: "Do I get a certificate?",
-            answer:
-              "Yes! You'll receive a certificate of completion for each course that you can add to your LinkedIn profile.",
-          },
-          {
-            question: "Is there a money-back guarantee?",
-            answer: "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your money.",
-          },
-          {
-            question: "Can I access courses on mobile?",
-            answer: "Yes! Our platform works perfectly on all devices - desktop, tablet, and mobile.",
-          },
-          {
-            question: "Do you offer job placement assistance?",
-            answer:
-              "Full Access Pass members get job placement assistance, including resume review and interview prep.",
-          },
-        ],
-      },
-      cta: {
-        title: "Ready to Transform Your Career?",
-        subtitle: "Join thousands of students who've already upgraded their skills and income",
-        button: "Start Learning Now",
-      },
-      footer: {
-        description: "Empowering the next generation of digital professionals",
-        links: {
-          courses: "Courses",
-          about: "About",
-          contact: "Contact",
-          privacy: "Privacy",
-          terms: "Terms",
-        },
-        copyright: "© 2025 Reskil. All rights reserved.",
-        contact: {
-          email: "support@reskil.com",
-          phone: "+212 766-831008",
-          instagram: "instagram.com/reskil.club",
-        },
-      },
-    },
-    ar: {
-      nav: {
-        home: "الرئيسية",
-        courses: "الدورات",
-        freeCourses: "الدورات المجانية",
-        pricing: "الأسعار",
-        testimonials: "التقييمات",
-        faq: "الأسئلة الشائعة",
-        joinNow: "انضم الآن",
-      },
-      hero: {
-        badge: "🚀 انضم لأكثر من 10,000 طالب",
-        title: "أتقن المهارات الرقمية التي تدفع فعلاً",
-        subtitle:
-          "تعلم التجارة الإلكترونية والذكاء الاصطناعي وتطوير المواقع والتصميم بتدريب عملي بدون حشو. كن جاهزاً للعمل في أسابيع وليس سنوات.",
-        cta1: "ابدأ التعلم اليوم",
-        cta2: "شاهد المعاينة",
-        exploreBtn: "استكشف الدورات",
-        stats: {
-          students: "+10,000 طالب",
-          completion: "95% معدل الإكمال",
-          satisfaction: "4.9/5 التقييم",
-        },
-      },
-      courses: {
-        title: "اختر مسارك التعليمي",
-        subtitle: "خيارات مرنة مصممة لجدولك وميزانيتك",
-        starter: {
-          name: "الدورة التأسيسية",
-          price: "490 درهم",
-          description: "مثالية للمبتدئين",
-          features: [
-            "+5 ساعات من المحتوى المرئي",
-            "موارد قابلة للتحميل",
-            "الوصول للمجتمع",
-            "شهادة إتمام",
-            "ضمان استرداد لمدة 30 يوم",
-          ],
-          cta: "ابدأ الآن",
-        },
-        fullAccess: {
-          name: "تذكرة الوصول الكامل",
-          price: "150 درهم/شهر",
-          description: "أفضل قيمة للمتعلمين الجادين",
-          popular: "الأكثر شعبية",
-          features: [
-            "الوصول لجميع الدورات",
-            "محتوى جديد كل أسبوع",
-            "جلسات أسئلة وأجوبة مباشرة",
-            "دعم أولوية",
-            "مساعدة في التوظيف",
-            "إلغاء في أي وقت",
-          ],
-          cta: "ابدأ التجربة المجانية",
-        },
-        private: {
-          name: "جلسة خاصة 1-على-1",
-          price: "290 درهم",
-          description: "إرشاد شخصي",
-          features: [
-            "جلسة خاصة لمدة 60 دقيقة",
-            "خطة تعلم شخصية",
-            "وصول مباشر للمرشد",
-            "مراجعة مشروع مخصص",
-            "إرشاد مهني",
-          ],
-          cta: "احجز جلسة",
-        },
-      },
-      features: {
-        title: "لماذا تختار Reskil؟",
-        subtitle: "نركز على المهارات العملية التي تؤهلك للتوظيف",
-        items: [
-          {
-            icon: Target,
-            title: "مهارات جاهزة للعمل",
-            description: "تعلم بالضبط ما يريده أصحاب العمل. لا نظريات، فقط مهارات عملية يمكنك استخدامها فوراً.",
-          },
-          {
-            icon: Clock,
-            title: "تعلم بوتيرتك",
-            description: "جدول مرن يناسب حياتك. ادرس متى تريد، أينما تريد.",
-          },
-          {
-            icon: Users,
-            title: "مرشدون خبراء",
-            description: "تعلم من محترفين في الصناعة بنوا مسيرات مهنية ناجحة في التكنولوجيا.",
-          },
-          {
-            icon: Award,
-            title: "نتائج مثبتة",
-            description: "95% من طلابنا يحصلون على وظائف أو يزيدون دخلهم خلال 6 أشهر.",
-          },
-        ],
-      },
-      testimonials: {
-        title: "قصص النجاح",
-        subtitle: "نتائج حقيقية من طلاب حقيقيين",
-        items: [
-          {
-            name: "مؤيد",
-            role: "مطور ويب",
-            content: "ساعدتني دورات Reskil في الانتقال من مطور تقليدي إلى خبير في التطوير الشامل. كان النهج العملي هو بالضبط ما احتجته.",
-            rating: 5,
-          },
-          {
-            name: "حمزة",
-            role: "مطور ويب",
-            content: "كانت دورة تطوير الويب شاملة وعملية. حصلت على وظيفتي الأولى كمطور في غضون شهرين من إكمالها.",
-            rating: 5,
-          },
-          {
-            name: "إيمان",
-            role: "مطور واجهات أمامية",
-            content: "كمبتدئ كامل، كنت متوترة بشأن تعلم البرمجة. جعل نهج Reskil المنظم الرحلة سلسة وممتعة.",
-            rating: 5,
-          },
-        ],
-      },
-      faq: {
-        title: "الأسئلة الشائعة",
-        subtitle: "كل ما تحتاج معرفته عن Reskil",
-        items: [
-          {
-            question: "كم من الوقت يستغرق إكمال الدورة؟",
-            answer: "يمكن إكمال معظم الدورات في 2-4 أسابيع مع 1-2 ساعة دراسة يومياً. يمكنك التقدم بوتيرتك الخاصة.",
-          },
-          {
-            question: "هل أحصل على شهادة؟",
-            answer: "نعم! ستحصل على شهادة إتمام لكل دورة يمكنك إضافتها لملفك الشخصي على LinkedIn.",
-          },
-          {
-            question: "هل يوجد ضمان استرداد الأموال؟",
-            answer: "بالطبع! نقدم ضمان استرداد لمدة 30 يوماً. إذا لم تكن راضياً، سنسترد أموالك.",
-          },
-          {
-            question: "هل يمكنني الوصول للدورات على الهاتف؟",
-            answer: "نعم! منصتنا تعمل بشكل مثالي على جميع الأجهزة - الكمبيوتر والتابلت والهاتف.",
-          },
-          {
-            question: "هل تقدمون مساعدة في التوظيف؟",
-            answer:
-              "أعضاء تذكرة الوصول الكامل يحصلون على مساعدة في التوظيف، بما في ذلك مراجعة السيرة الذاتية والتحضير للمقابلات.",
-          },
-        ],
-      },
-      cta: {
-        title: "جاهز لتحويل مسيرتك المهنية؟",
-        subtitle: "انضم لآلاف الطلاب الذين طوروا مهاراتهم ودخلهم بالفعل",
-        button: "ابدأ التعلم الآن",
-      },
-      footer: {
-        description: "تمكين الجيل القادم من المحترفين الرقميين",
-        links: {
-          courses: "الدورات",
-          about: "من نحن",
-          contact: "اتصل بنا",
-          privacy: "الخصوصية",
-          terms: "الشروط",
-        },
-        copyright: "© 2025 Reskil. جميع الحقوق محفوظة.",
-        contact: {
-          email: "support@reskil.com",
-          phone: "+212 766-831008",
-          instagram: "instagram.com/reskil.club",
-        },
-      },
-    },
+    try {
+      const prompt = `Generate a short, engaging social media post for a course about "${socialContentTopic}". Include relevant emojis and a strong call to action. Make it concise and attention-grabbing.`
+      const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] }
+      const apiKey = "AIzaSyAiNUPrY-gyonRR3M4njdL972W5BBIFl9Q"
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+
+      if (!response.ok) throw new Error(`API error: ${response.statusText}`)
+
+      const result = await response.json()
+      if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+        setGeneratedSocialContent(result.candidates[0].content.parts[0].text)
+      } else {
+        setSocialContentError("Failed to generate content. Please try again.")
+      }
+    } catch (error) {
+      setSocialContentError(`An error occurred: ${error instanceof Error ? error.message : "Please check console for details."}`)
+    } finally {
+      setIsGeneratingContent(false)
+    }
   }
 
-  const t = content[language]
+  const courses = [
+    { name: "Dropshipping Course", revenue: "$22,454.20", sales: "424", trending: "" },
+    { name: "Copywriting Course", revenue: "$95,254.67", sales: "1,162", trending: "+1" },
+    { name: "SMMA Course", revenue: "$104,530.21", sales: "1,537", trending: "+1" },
+    { name: "High Ticket Closer Course", revenue: "$102,816.52", sales: "1,049", trending: "+1" },
+    { name: "Day Trading Course", revenue: "$32,031.26", sales: "372", trending: "+1" }
+  ]
+
+  const features = [
+    {
+      title: "White-label & Resell Premium Courses",
+      description: "Access 8 high-value courses across in-demand niches—ready to resell instantly with no content creation required.",
+      icon: Globe
+    },
+    {
+      title: "25K+ Videos to Grow Your Social Media",
+      description: "Unlock a premium vault of pre-edited viral content—luxury lifestyle reels, motivational clips, and more.",
+      icon: Film
+    },
+    {
+      title: "Plug & Play Sales Funnels in 2 Minutes",
+      description: "Every course comes with a high-converting landing page. No coding, no setup. Just personalize and start selling.",
+      icon: Zap
+    },
+    {
+      title: "Built-in Expert AI Course Assistants",
+      description: "Each course includes a pre-trained AI chatbot—ready to answer questions, close leads, and support students 24/7.",
+      icon: Lightbulb
+    }
+  ]
+
+  const faqs = [
+    { question: "Do I keep 100% of the profits?", answer: "Yes, you get to keep 100% of the profit you earn from your sales! There are no additional commissions or hidden charges." },
+    { question: "How do payments work?", answer: "ResKil integrates with major payment providers like Stripe, PayPal, and Square. All payments go directly to you." },
+    { question: "Can I bundle courses?", answer: "Yes! You can bundle multiple courses together, offer them individually, or create unique package deals." },
+    { question: "How do I cancel?", answer: "Canceling takes two clicks in your dashboard—no hassle, no complications." }
+  ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white font-sans antialiased text-gray-900">
+      <style jsx>{`
+        input[type="range"]::-webkit-slider-runnable-track {
+          background: linear-gradient(to right, #3B82F6 var(--range-progress), #BFDBFE var(--range-progress));
+          border-radius: 9999px;
+        }
+        input[type="range"]::-moz-range-track {
+          background: linear-gradient(to right, #3B82F6 var(--range-progress), #BFDBFE var(--range-progress));
+          border-radius: 9999px;
+        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide-down { animation: slideDown 0.3s ease-out; }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out; }
+        .animate-fade-in-down { animation: fadeInDown 0.3s ease-out; }
+      `}</style>
+
       {/* Navigation */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Link href="/" className="text-2xl font-bold text-blue-600">
-                  Reskil
-                </Link>
-              </div>
-              <div className="hidden md:block">
-                <div className="ml-10 flex items-baseline space-x-4">
+            <div className="flex-shrink-0">
+              <a href="/" className="text-2xl font-bold text-blue-600">ResKil</a>
+            </div>
+            <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
+              <div className="flex items-center space-x-8">
+                {["features", "courses", "pricing", "faq"].map((section) => (
                   <button
-                    onClick={() => scrollToSection("hero")}
-                    className={`px-3 py-2 text-sm font-medium transition-colors rounded-lg ${
-                      pathname === "/"
-                        ? "text-blue-600 bg-blue-50"
-                        : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-                    }`}
+                    key={section}
+                    onClick={() => scrollToSection(section)}
+                    className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200 capitalize"
                   >
-                    {t.nav.home}
+                    {section}
                   </button>
-                  <Link
-                    href="/free-courses"
-                    className={`px-3 py-2 text-sm font-medium transition-colors rounded-lg ${
-                      pathname === "/free-courses"
-                        ? "text-blue-600 bg-blue-50"
-                        : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-                    }`}
-                  >
-                    {t.nav.freeCourses}
-                  </Link>
-                  <button
-                    onClick={() => scrollToSection("pricing")}
-                    className="text-gray-600 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 text-sm font-medium transition-colors rounded-lg"
-                  >
-                    {t.nav.pricing}
-                  </button>
-                  <button
-                    onClick={() => scrollToSection("testimonials")}
-                    className="text-gray-600 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 text-sm font-medium transition-colors rounded-lg"
-                  >
-                    {t.nav.testimonials}
-                  </button>
-                  <button
-                    onClick={() => scrollToSection("faq")}
-                    className="text-gray-600 hover:text-blue-600 hover:bg-gray-50 px-3 py-2 text-sm font-medium transition-colors rounded-lg"
-                  >
-                    {t.nav.faq}
-                  </button>
-                </div>
+                ))}
               </div>
             </div>
-            <div className="hidden md:flex items-center space-x-4">
-              <EnhancedButton
-                variant="outline"
-                size="sm"
-                onClick={toggleLanguage}
-                className="flex items-center space-x-2"
-              >
-                <Globe className="h-4 w-4" />
-                <span>{language === "en" ? "العربية" : "English"}</span>
-              </EnhancedButton>
-              <Link href="/signup">
-                <EnhancedButton size="sm">{t.nav.joinNow}</EnhancedButton>
-              </Link>
+            <div className="hidden md:block">
+              <a href="/signup">
+                <button className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-md transition-colors duration-200">
+                  Start now →
+                </button>
+              </a>
             </div>
-            <div className="md:hidden flex items-center space-x-2">
-              <EnhancedButton
-                variant="outline"
-                size="sm"
-                onClick={toggleLanguage}
-                className="flex items-center space-x-1"
+            <div className="md:hidden">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-gray-600 hover:text-gray-900 p-1"
               >
-                <Globe className="h-4 w-4" />
-                <span className="text-xs">{language === "en" ? "AR" : "EN"}</span>
-              </EnhancedButton>
-              <EnhancedButton
-                variant="ghost"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setMobileMenuOpen(!mobileMenuOpen)
-                }}
-              >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </EnhancedButton>
+                {mobileMenuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+              </button>
             </div>
           </div>
         </div>
@@ -498,368 +170,345 @@ export default function LandingPage() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-gray-200 shadow-lg">
+        <div className="md:hidden bg-white border-b shadow-lg absolute w-full z-40 animate-slide-down">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <button
-              onClick={() => scrollToSection("hero")}
-              className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 w-full text-left rounded-lg"
-            >
-              {t.nav.home}
-            </button>
-            <Link
-              href="dashboard/courses"
-              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t.nav.courses}
-            </Link>
-            <Link
-              href="/free-courses"
-              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t.nav.freeCourses}
-            </Link>
-            <button
-              onClick={() => scrollToSection("pricing")}
-              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 w-full text-left rounded-lg"
-            >
-              {t.nav.pricing}
-            </button>
-            <button
-              onClick={() => scrollToSection("testimonials")}
-              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 w-full text-left rounded-lg"
-            >
-              {t.nav.testimonials}
-            </button>
-            <button
-              onClick={() => scrollToSection("faq")}
-              className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 w-full text-left rounded-lg"
-            >
-              {t.nav.faq}
-            </button>
+            {["features", "courses", "pricing", "faq"].map((section) => (
+              <button
+                key={section}
+                onClick={() => scrollToSection(section)}
+                className="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-blue-50 hover:text-blue-600 w-full text-left rounded-md capitalize"
+              >
+                {section}
+              </button>
+            ))}
             <div className="px-3 py-2">
-              <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
-                <EnhancedButton className="w-full">{t.nav.joinNow}</EnhancedButton>
-              </Link>
+              <a href="/signup">
+                <button className="w-full bg-blue-600 text-white px-4 py-2.5 rounded-lg text-base font-medium hover:bg-blue-700 transition-colors duration-200">
+                  Start now →
+                </button>
+              </a>
             </div>
           </div>
         </div>
       )}
 
       {/* Hero Section */}
-      <section id="hero" className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-            <Badge className="mb-6 bg-blue-100 text-blue-800 hover:bg-blue-100 text-sm font-medium px-4 py-2 rounded-lg">
-              {t.hero.badge}
-            </Badge>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              {t.hero.title}
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">{t.hero.subtitle}</p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 px-4 mb-12">
-              <Link href="/signup">
-                <EnhancedButton size="lg" className="px-8 py-4 text-lg">
-                  {t.hero.cta1}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </EnhancedButton>
-              </Link>
-              <EnhancedButton
-                variant="outline"
-                size="lg"
-                className="px-8 py-4 text-lg"
-                onClick={() => scrollToSection("video-preview")}
-              >
-                <Play className="mr-2 h-5 w-5" />
-                {t.hero.cta2}
-              </EnhancedButton>
-              <Link href="dashboard/courses">
-                <EnhancedButton variant="secondary" size="lg" className="px-8 py-4 text-lg">
-                  {t.hero.exploreBtn}
-                </EnhancedButton>
-              </Link>
+      <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16 md:py-20 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800 mb-4">
+            🚀 New course just dropped for June 2025!
+          </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
+            Launch Your Digital Empire: <span className="text-blue-600">White-Label Courses & AI-Powered Sales</span>
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            ResKil provides everything you need to sell high-value digital courses under your brand, without creating content. Scale to $10K+ /monthly, effortlessly.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+            <a href="/signup">
+              <button className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-blue-700 transition-all duration-300 shadow-lg transform hover:-translate-y-1">
+                Start your business now →
+              </button>
+            </a>
+            <button className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg text-lg font-medium hover:bg-gray-50 transition-all duration-300 flex items-center justify-center">
+              <Play className="mr-3 h-6 w-6 text-blue-600" />
+              Watch Demo
+            </button>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-12">
+            <div className="flex items-center text-gray-700 text-lg">
+              <Users className="h-6 w-6 text-blue-500 mr-3" />
+              <span className="font-semibold">15,000+ Successful ResKilrs</span>
             </div>
-
-            {/* YouTube Video Embed */}
-            <div id="video-preview" className="max-w-4xl mx-auto mb-12">
-              <div className="relative aspect-video rounded-xl overflow-hidden shadow-2xl">
-                <iframe
-                  src="https://www.youtube.com/embed/d8UykXD85m8"
-                  title="Course Preview"
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">{t.hero.stats.students}</div>
-                <div className="text-gray-600">Active Learners</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">{t.hero.stats.completion}</div>
-                <div className="text-gray-600">Success Rate</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">{t.hero.stats.satisfaction}</div>
-                <div className="text-gray-600">Student Rating</div>
-              </div>
+            <div className="flex items-center text-gray-700 text-lg">
+              <Shield className="h-6 w-6 text-green-500 mr-3" />
+              <span className="font-semibold">100% White-Labeled & Yours</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-white">
+      <section id="features" className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.features.title}</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t.features.subtitle}</p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+              Scale to <span className="text-blue-600">$10K+ /month</span> with Our Proven System
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">Try free for 7 days, no commitments.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {t.features.items.map((feature, index) => (
-              <div key={index} className={`text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <feature.icon className="h-8 w-8 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {features.map((feature, index) => (
+              <div key={index} className="bg-gray-50 p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                <feature.icon className="h-10 w-10 text-blue-600 mb-4" />
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                <p className="text-gray-600 text-lg">{feature.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20 bg-gray-50">
+      {/* Live Results Section */}
+      <section id="courses" className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.courses.title}</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t.courses.subtitle}</p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+              Live Results: <span className="text-blue-600">See What's Selling</span> in Real Time
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">Transparent insights from our top-performing courses.</p>
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* Starter Course */}
-            <Card className="relative border-2 border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg rounded-lg">
-              <CardHeader className={`text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                <CardTitle className="text-2xl font-bold">{t.courses.starter.name}</CardTitle>
-                <div className="text-4xl font-bold text-blue-600 my-4">{t.courses.starter.price}</div>
-                <p className="text-gray-600">{t.courses.starter.description}</p>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 mb-8">
-                  {t.courses.starter.features.map((feature, index) => (
-                    <li key={index} className={`flex items-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/signup">
-                  <EnhancedButton className="w-full">{t.courses.starter.cta}</EnhancedButton>
-                </Link>
-              </CardContent>
-            </Card>
-
-            {/* Full Access Pass */}
-            <Card className="relative border-2 border-blue-500 shadow-lg scale-105 hover:shadow-xl transition-all duration-300 rounded-lg">
-              <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white rounded-lg">
-                {t.courses.fullAccess.popular}
-              </Badge>
-              <CardHeader className={`text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                <CardTitle className="text-2xl font-bold">{t.courses.fullAccess.name}</CardTitle>
-                <div className="text-4xl font-bold text-blue-600 my-4">{t.courses.fullAccess.price}</div>
-                <p className="text-gray-600">{t.courses.fullAccess.description}</p>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 mb-8">
-                  {t.courses.fullAccess.features.map((feature, index) => (
-                    <li key={index} className={`flex items-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/signup">
-                  <EnhancedButton className="w-full">{t.courses.fullAccess.cta}</EnhancedButton>
-                </Link>
-              </CardContent>
-            </Card>
-
-            {/* Private Session */}
-            <Card className="relative border-2 border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg rounded-lg">
-              <CardHeader className={`text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                <CardTitle className="text-2xl font-bold">{t.courses.private.name}</CardTitle>
-                <div className="text-4xl font-bold text-blue-600 my-4">{t.courses.private.price}</div>
-                <p className="text-gray-600">{t.courses.private.description}</p>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 mb-8">
-                  {t.courses.private.features.map((feature, index) => (
-                    <li key={index} className={`flex items-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/contact">
-                  <EnhancedButton className="w-full">{t.courses.private.cta}</EnhancedButton>
-                </Link>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {courses.map((course, index) => (
+              <div key={index} className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{course.name}</h3>
+                <div className="mt-4 flex items-end justify-between">
+                  <div>
+                    <p className="text-3xl font-extrabold text-blue-600 mb-1">{course.revenue}</p>
+                    <p className="text-gray-600 text-sm">Total Revenue Generated</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-medium text-gray-800">Sales: {course.sales}</p>
+                    {course.trending && (
+                      <p className="text-green-500 text-sm font-semibold flex items-center justify-end mt-1">
+                        <TrendingUp className="h-4 w-4 mr-1" /> {course.trending} spot
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
+          <div className="text-center mt-8">
+            <a href="/courses">
+              <button className="px-8 py-3 text-lg font-semibold text-blue-600 hover:text-blue-800 hover:bg-blue-50 transition-colors duration-200 rounded-lg flex items-center justify-center mx-auto">
+                Explore All Courses <ArrowRight className="ml-2 h-5 w-5" />
+              </button>
+            </a>
+          </div>
+        </div>
+      </section>
 
-          {/* Trust Elements */}
-          <div className="mt-16 text-center">
-            <div className="flex justify-center items-center space-x-8 opacity-60">
-              <div className="flex items-center">
-                <Shield className="h-6 w-6 text-green-500 mr-2" />
-                <span className="text-sm">Secure Checkout</span>
+      {/* AI Social Media Content Generator */}
+      <section className="py-16 bg-blue-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">✨ AI Social Media Content Generator ✨</h2>
+          <p className="text-xl text-gray-700 max-w-2xl mx-auto mb-8">
+            Effortlessly generate engaging social media posts for your courses using AI.
+          </p>
+          <div className="bg-white p-6 rounded-xl shadow-lg border border-blue-200">
+            <div className="mb-6 text-left">
+              <label htmlFor="socialContentTopic" className="block text-gray-700 text-lg font-semibold mb-3">
+                Enter your course topic or keyword:
+              </label>
+              <input
+                type="text"
+                id="socialContentTopic"
+                value={socialContentTopic}
+                onChange={(e) => setSocialContentTopic(e.target.value)}
+                placeholder="e.g., 'Dropshipping for Beginners' or 'Advanced Copywriting'"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+              />
+              {socialContentError && <p className="text-red-500 text-sm mt-2">{socialContentError}</p>}
+            </div>
+            <button
+              onClick={generateSocialMediaContent}
+              disabled={isGeneratingContent}
+              className={`w-full px-8 py-4 rounded-lg text-xl font-bold transition-all duration-300 flex items-center justify-center ${
+                isGeneratingContent
+                  ? 'bg-blue-400 text-white cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700 shadow-xl transform hover:-translate-y-1'
+              }`}
+            >
+              {isGeneratingContent ? (
+                <>
+                  <Loader2 className="animate-spin mr-3 h-6 w-6" /> Generating...
+                </>
+              ) : (
+                <>Generate Content ✨ →</>
+              )}
+            </button>
+            {generatedSocialContent && (
+              <div className="mt-6 p-6 bg-gray-50 rounded-lg border border-gray-200 text-left">
+                <h3 className="text-xl font-bold text-gray-800 mb-3">Your Generated Post:</h3>
+                <p className="text-gray-700 whitespace-pre-wrap">{generatedSocialContent}</p>
               </div>
-              <div className="flex items-center">
-                <Users className="h-6 w-6 text-blue-500 mr-2" />
-                <span className="text-sm">10,000+ Students</span>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+              One Ultimate Plan. <span className="text-blue-600">No Complicated Tiers.</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">Everything you need to succeed, all included.</p>
+          </div>
+          <div className="max-w-2xl mx-auto bg-gray-50 p-6 rounded-3xl border border-gray-200 shadow-xl">
+            <div className="flex justify-center mb-6">
+              <div className="inline-flex bg-white rounded-xl shadow-sm border border-gray-200">
+                <button
+                  onClick={() => setIsYearlyPricing(false)}
+                  className={`px-6 py-3 text-base font-semibold rounded-l-xl transition-colors duration-200 ${
+                    !isYearlyPricing ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-white text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Monthly
+                </button>
+                <button
+                  onClick={() => setIsYearlyPricing(true)}
+                  className={`px-6 py-3 text-base font-semibold rounded-r-xl transition-colors duration-200 ${
+                    isYearlyPricing ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-white text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Yearly (7 Months Free)
+                </button>
               </div>
-              <div className="flex items-center">
-                <Award className="h-6 w-6 text-yellow-500 mr-2" />
-                <span className="text-sm">Money Back Guarantee</span>
-              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-3xl font-extrabold text-gray-900 mb-2">ResKil All-Access</h3>
+              <p className="text-5xl font-extrabold text-blue-600 mb-6 flex items-center justify-center">
+                {isYearlyPricing ? (
+                  <>
+                    $499<span className="text-lg text-gray-500 line-through ml-3">$588</span>
+                    <span className="text-xl text-gray-600 font-medium ml-2">/year</span>
+                  </>
+                ) : (
+                  <>
+                    $49<span className="text-lg text-gray-500 line-through ml-3">$75</span>
+                    <span className="text-xl text-gray-600 font-medium ml-2">/month</span>
+                  </>
+                )}
+              </p>
+              <ul className="space-y-3 mb-8 text-left text-lg">
+                {[
+                  "8+ Premium White-Labelled Courses to Sell",
+                  "25k+ Videos in Viral Content Library",
+                  "Integrated Website Builder + High-Converting Templates",
+                  "Custom AI Instructors & Support Chatbots",
+                  "24/7 Priority Support"
+                ].map((feature, index) => (
+                  <li key={index} className="flex items-center">
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <a href="/signup">
+                <button className="w-full bg-blue-600 text-white px-8 py-4 rounded-lg text-xl font-bold hover:bg-blue-700 transition-colors duration-300 shadow-xl transform hover:-translate-y-1">
+                  Get Instant Access →
+                </button>
+              </a>
+              <p className="text-gray-500 mt-4 text-sm">Risk-free 7-day trial. Cancel anytime.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-    <section id="testimonials" className="py-20 bg-white">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`text-center mb-16 ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.testimonials.title}</h2>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t.testimonials.subtitle}</p>
+      {/* Profit Calculator */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+              Your <span className="text-blue-600">Monthly Profit</span> Calculator
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">See how much you can earn with ResKil.</p>
+          </div>
+          <div className="max-w-md mx-auto bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+            <div className="mb-6">
+              <label htmlFor="resellPrice" className="block text-gray-700 font-semibold mb-3 text-lg">
+                You resell our premium course for: <span className="text-blue-600 font-extrabold text-2xl">${resellPrice}</span>
+              </label>
+              <input
+                type="range"
+                id="resellPrice"
+                min="0"
+                max="1000"
+                step="50"
+                value={resellPrice}
+                onChange={(e) => setResellPrice(Number(e.target.value))}
+                className="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer"
+                style={{ '--range-progress': `${(resellPrice / 1000) * 100}%` } as CustomCSSProperties}
+              />
+              <div className="flex justify-between text-gray-600 text-sm mt-2">
+                <span>$0</span>
+                <span>$250</span>
+                <span>$500</span>
+                <span>$750</span>
+                <span>$1000+</span>
+              </div>
+            </div>
+            <div className="mb-6">
+              <label htmlFor="monthlyStudents" className="block text-gray-700 font-semibold mb-3 text-lg">
+                Students buy the course monthly: <span className="text-blue-600 font-extrabold text-2xl">{monthlyStudents}</span>
+              </label>
+              <input
+                type="range"
+                id="monthlyStudents"
+                min="0"
+                max="100"
+                step="5"
+                value={monthlyStudents}
+                onChange={(e) => setMonthlyStudents(Number(e.target.value))}
+                className="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer"
+                style={{ '--range-progress': `${(monthlyStudents / 100) * 100}%` } as CustomCSSProperties}
+              />
+              <div className="flex justify-between text-gray-600 text-sm mt-2">
+                <span>0</span>
+                <span>25</span>
+                <span>50</span>
+                <span>75</span>
+                <span>100+</span>
+              </div>
+            </div>
+            <div className="bg-blue-50 p-6 rounded-lg mb-6 text-center">
+              <p className="text-gray-700 text-lg mb-2">Estimated Monthly Profit:</p>
+              <p className="text-5xl font-extrabold text-blue-700 flex items-center justify-center">
+                <DollarSign className="h-10 w-10 mr-2" /> {monthlyProfit}
+              </p>
+              <p className="text-gray-500 text-xs mt-3">*Minus ResKil $49.99 Monthly Investment. Calculations are estimates.</p>
+            </div>
+            <a href="/signup">
+              <button className="w-full bg-blue-600 text-white px-8 py-4 rounded-lg text-xl font-bold hover:bg-blue-700 transition-colors duration-300 shadow-xl transform hover:-translate-y-1">
+                Claim Your Profit Now →
+              </button>
+            </a>
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <Card className="border-2 border-gray-100 hover:border-blue-200 transition-all duration-300 hover:shadow-lg rounded-lg">
-            <CardContent className="pt-6">
-            <div className="flex mb-4">
-                {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                ))}
-            </div>
-            <p className={`text-gray-700 mb-6 italic ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                "Reskil's courses helped me transition from a traditional developer to a full-stack expert. The practical approach was exactly what I needed."
-            </p>
-            <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                <img src="/avatars/mouad.webp" alt="Mouad" className="w-full h-full object-cover" />
-                </div>
-                <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
-                <p className="font-semibold text-gray-900">Mouad</p>
-                <p className="text-sm text-gray-600">Web Developer</p>
-                </div>
-            </div>
-            </CardContent>
-        </Card>
+      </section>
 
-        <Card className="border-2 border-gray-100 hover:border-blue-200 transition-all duration-300 hover:shadow-lg rounded-lg">
-            <CardContent className="pt-6">
-            <div className="flex mb-4">
-                {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                ))}
-            </div>
-            <p className={`text-gray-700 mb-6 italic ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                "The web development course was comprehensive and practical. I landed my first developer job within 2 months of completing it."
-            </p>
-            <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                <img src="/avatars/hamza.webp" alt="Hamza" className="w-full h-full object-cover" />
-                </div>
-                <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
-                <p className="font-semibold text-gray-900">Hamza</p>
-                <p className="text-sm text-gray-600">Web Developer</p>
-                </div>
-            </div>
-            </CardContent>
-        </Card>
-
-        <Card className="border-2 border-gray-100 hover:border-blue-200 transition-all duration-300 hover:shadow-lg rounded-lg">
-            <CardContent className="pt-6">
-            <div className="flex mb-4">
-                {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                ))}
-            </div>
-            <p className={`text-gray-700 mb-6 italic ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                "As a complete beginner, I was nervous about learning to code. Reskil's structured approach made the journey smooth and enjoyable."
-            </p>
-            <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                <img src="/avatars/imane.webp" alt="Imane" className="w-full h-full object-cover" />
-                </div>
-                <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
-                <p className="font-semibold text-gray-900">Imane</p>
-                <p className="text-sm text-gray-600">Frontend Developer</p>
-                </div>
-            </div>
-            </CardContent>
-        </Card>
-
-        <Card className="border-2 border-gray-100 hover:border-blue-200 transition-all duration-300 hover:shadow-lg rounded-lg">
-            <CardContent className="pt-6">
-            <div className="flex mb-4">
-                {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                ))}
-            </div>
-            <p className={`text-gray-700 mb-6 italic ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                "The AI course opened up new opportunities for me. I'm now working on cutting-edge projects I never thought possible."
-            </p>
-            <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                <img src="/avatars/rida.webp" alt="Rida" className="w-full h-full object-cover" />
-                </div>
-                <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
-                <p className="font-semibold text-gray-900">Rida</p>
-                <p className="text-sm text-gray-600">AI Developer</p>
-                </div>
-            </div>
-            </CardContent>
-        </Card>
-        </div>
-    </div>
-    </section>
       {/* FAQ Section */}
-      <section id="faq" className="py-20 bg-gray-50">
+      <section id="faq" className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.faq.title}</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t.faq.subtitle}</p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Frequently Asked Questions</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">Everything you need to know about ResKil.</p>
           </div>
           <div className="space-y-4">
-            {t.faq.items.map((item, index) => (
-              <Card key={index} className="border-2 border-gray-200 hover:border-blue-200 transition-colors rounded-lg">
-                <CardContent className="p-0">
-                  <button
-                    className={`w-full p-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors rounded-lg ${language === "ar" ? "rtl-text" : "ltr-text"}`}
-                    onClick={() => toggleAccordion(index)}
-                  >
-                    <span className="text-lg font-semibold text-gray-900">{item.question}</span>
-                    {activeAccordion === index ? (
-                      <ChevronUp className="h-5 w-5 text-gray-500 flex-shrink-0" />
-                    ) : (
-                      <ChevronDown className="h-5 w-5 text-gray-500 flex-shrink-0" />
-                    )}
-                  </button>
-                  {activeAccordion === index && (
-                    <div className={`px-6 pb-6 ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                      <p className="text-gray-700">{item.answer}</p>
-                    </div>
+            {faqs.map((faq, index) => (
+              <div key={index} className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                <button
+                  className={`w-full p-6 text-left flex justify-between items-center transition-all duration-300 ${
+                    activeAccordion === index ? 'bg-blue-50 text-blue-700 font-semibold' : 'bg-white hover:bg-gray-50 text-gray-900'
+                  }`}
+                  onClick={() => toggleAccordion(index)}
+                >
+                  <span className="text-lg">{faq.question}</span>
+                  {activeAccordion === index ? (
+                    <ChevronUp className="h-6 w-6 text-blue-600 flex-shrink-0 ml-4" />
+                  ) : (
+                    <ChevronDown className="h-6 w-6 text-gray-500 flex-shrink-0 ml-4" />
                   )}
-                </CardContent>
-              </Card>
+                </button>
+                {activeAccordion === index && (
+                  <div className="p-6 pt-0 text-gray-700 animate-fade-in-down">
+                    <p className="leading-relaxed">{faq.answer}</p>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
@@ -867,104 +516,142 @@ export default function LandingPage() {
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
-        <div
-          className={`max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center ${language === "ar" ? "rtl-text" : "ltr-text"}`}
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">{t.cta.title}</h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">{t.cta.subtitle}</p>
-          <Link href="/signup">
-            <EnhancedButton size="xl" className="bg-white text-blue-600 hover:bg-gray-100 shadow-lg hover:shadow-xl">
-              {t.cta.button}
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </EnhancedButton>
-          </Link>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">Join <span className="text-yellow-300">15,000+ ResKilrs</span> Making Money Today</h2>
+          <p className="text-xl text-blue-100 mb-8">
+            Unlock your potential and build a thriving digital product business with our proven system.
+          </p>
+          <a href="/signup">
+            <button className="bg-white text-blue-600 px-10 py-5 rounded-lg text-xl font-bold hover:bg-gray-100 transition-colors duration-300 shadow-xl transform hover:-translate-y-1">
+              Get Instant Access &rarr;
+            </button>
+          </a>
+          <div className="mt-8 flex justify-center items-center text-white text-lg">
+            <div className="flex items-center">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="h-6 w-6 text-yellow-400 fill-current" />
+              ))}
+              <span className="ml-3 font-semibold">4.8 out of 5 stars based on 500+ reviews</span>
+            </div>
+          </div>
         </div>
       </section>
-	  <elevenlabs-convai agent-id="agent_01jxa2wqz1efqt38wsxd9qhpny"></elevenlabs-convai>
-	  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="sm:col-span-2 lg:col-span-1">
-              <div className="flex items-center mb-4">
-                <span className="text-2xl font-bold text-blue-400">Reskil</span>
-              </div>
-              <p className={`text-gray-400 mb-4 max-w-md ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-                {t.footer.description}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Brand Section */}
+            <div>
+              <h3 className="text-2xl font-bold text-white mb-3">Reskil</h3>
+              <p className="text-gray-400 leading-relaxed">
+                Empowering the next generation of digital professionals
               </p>
             </div>
-            <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
-              <h4 className="text-lg font-semibold mb-4">Contact</h4>
-              <ul className="space-y-2">
+
+            {/* Contact Section */}
+            <div>
+              <h4 className="text-xl font-semibold mb-4 text-white">Contact</h4>
+              <ul className="space-y-3">
                 <li>
-                  <a
-                    href={`mailto:${t.footer.contact.email}`}
-                    className="text-gray-400 hover:text-white text-sm transition-colors"
+                  <a 
+                    href="mailto:support@reskil.com" 
+                    className="text-gray-400 hover:text-white transition-colors duration-200 flex items-center"
                   >
-                    {t.footer.contact.email}
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    support@reskil.com
                   </a>
                 </li>
                 <li>
-                  <a
-                    href={`tel:${t.footer.contact.phone}`}
-                    className="text-gray-400 hover:text-white text-sm transition-colors"
+                  <a 
+                    href="tel:+212766831008" 
+                    className="text-gray-400 hover:text-white transition-colors duration-200 flex items-center"
                   >
-                    {t.footer.contact.phone}
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    +212 766-831008
                   </a>
                 </li>
                 <li>
-                  <a
-                    href={`https://${t.footer.contact.instagram}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white text-sm transition-colors"
+                  <a 
+                    href="https://www.instagram.com/reskil" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-gray-400 hover:text-white transition-colors duration-200 flex items-center"
                   >
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
                     Instagram
                   </a>
                 </li>
               </ul>
             </div>
-            <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
-              <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
+
+            {/* Quick Links Section */}
+            <div>
+              <h4 className="text-xl font-semibold mb-4 text-white">Quick Links</h4>
+              <ul className="space-y-3">
                 <li>
-                  <Link href="dashboard/courses" className="text-gray-400 hover:text-white text-sm transition-colors">
-                    {t.footer.links.courses}
-                  </Link>
+                  <a 
+                    href="/courses" 
+                    className="text-gray-400 hover:text-white transition-colors duration-200"
+                  >
+                    Courses
+                  </a>
                 </li>
                 <li>
-                  <Link href="/about" className="text-gray-400 hover:text-white text-sm transition-colors">
-                    {t.footer.links.about}
-                  </Link>
+                  <a 
+                    href="/about" 
+                    className="text-gray-400 hover:text-white transition-colors duration-200"
+                  >
+                    About
+                  </a>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">
-                    {t.footer.links.contact}
-                  </Link>
+                  <a 
+                    href="/contact" 
+                    className="text-gray-400 hover:text-white transition-colors duration-200"
+                  >
+                    Contact
+                  </a>
                 </li>
               </ul>
             </div>
-            <div className={language === "ar" ? "rtl-text" : "ltr-text"}>
-              <h4 className="text-lg font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2">
+
+            {/* Legal Section */}
+            <div>
+              <h4 className="text-xl font-semibold mb-4 text-white">Legal</h4>
+              <ul className="space-y-3">
                 <li>
-                  <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
-                    {t.footer.links.privacy}
-                  </Link>
+                  <a 
+                    href="/privacy" 
+                    className="text-gray-400 hover:text-white transition-colors duration-200"
+                  >
+                    Privacy
+                  </a>
                 </li>
                 <li>
-                  <Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
-                    {t.footer.links.terms}
-                  </Link>
+                  <a 
+                    href="/terms" 
+                    className="text-gray-400 hover:text-white transition-colors duration-200"
+                  >
+                    Terms
+                  </a>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-            <p className={`text-gray-400 text-sm ${language === "ar" ? "rtl-text" : "ltr-text"}`}>
-              {t.footer.copyright}
+
+          {/* Copyright Section */}
+          <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+            <p className="text-gray-400">
+              © {new Date().getFullYear()} Reskil. All rights reserved.
             </p>
           </div>
         </div>
