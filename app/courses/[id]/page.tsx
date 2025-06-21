@@ -49,33 +49,33 @@ export default function CourseDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-background text-foreground">
       <Head>
         <title>{course.title} | Reskil</title>
         <meta name="description" content={course.description} />
       </Head>
 
       {/* Navigation - White background with centered links */}
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="bg-background border-b border-border sticky top-0 z-50 shadow-sm">
+        <div className="container">
           <div className="flex items-center justify-center h-16 relative">
-            <Link href="/" className="text-2xl font-bold text-blue-600 absolute left-4 sm:left-6 lg:left-8">
+            <Link href="/" className="text-2xl font-bold text-primary absolute left-4 sm:left-6 lg:left-8">
               Reskil
             </Link>
 
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="#features" className="text-gray-600 hover:text-blue-600">
+              <Link href="#features" className="text-muted-foreground hover:text-primary">
                 Features
               </Link>
-              <Link href="/courses" className="text-gray-600 hover:text-blue-600">
+              <Link href="/courses" className="text-muted-foreground hover:text-primary">
                 Courses
               </Link>
-              <Link href="#pricing" className="text-gray-600 hover:text-blue-600">
+              <Link href="#pricing" className="text-muted-foreground hover:text-primary">
                 Pricing
               </Link>
             </div>
 
-            <Link href="/login" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white absolute right-4 sm:right-6 lg:right-8">
+            <Link href="/login" className="btn-theme px-4 py-2 absolute right-4 sm:right-6 lg:right-8">
               Get Started
             </Link>
           </div>
@@ -84,37 +84,37 @@ export default function CourseDetailPage() {
 
       {/* Course Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 to-purple-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container">
           <div className="flex flex-col lg:flex-row gap-12">
             <div className="lg:w-2/3">
               <h1 className="text-4xl sm:text-5xl font-bold mb-4">{course.title}</h1>
-              <h2 className="text-2xl text-gray-700 mb-6">{course.subtitle}</h2>
-              <p className="text-lg text-gray-600 mb-8">{course.description}</p>
+              <h2 className="text-2xl text-muted-foreground mb-6">{course.subtitle}</h2>
+              <p className="text-lg text-muted-foreground mb-8">{course.description}</p>
               
               <div className="flex flex-wrap gap-4 mb-8">
-                <div className="flex items-center bg-white px-4 py-2 rounded-lg border border-gray-200">
-                  <Users className="text-blue-600 mr-2" />
+                <div className="flex items-center bg-background px-4 py-2 rounded-lg border border-border">
+                  <Users className="text-primary mr-2" />
                   <span>2,000+ Students</span>
                 </div>
-                <div className="flex items-center bg-white px-4 py-2 rounded-lg border border-gray-200">
+                <div className="flex items-center bg-background px-4 py-2 rounded-lg border border-border">
                   <Star className="text-yellow-500 mr-2" />
                   <span>4.9/5 Rating</span>
                 </div>
-                <div className="flex items-center bg-white px-4 py-2 rounded-lg border border-gray-200">
-                  <BookOpen className="text-blue-600 mr-2" />
+                <div className="flex items-center bg-background px-4 py-2 rounded-lg border border-border">
+                  <BookOpen className="text-primary mr-2" />
                   <span>60+ Lessons</span>
                 </div>
               </div>
 
               <Link
                 href={`/signup?course=${course.id}`}
-                className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium text-white text-lg"
+                className="btn-theme px-8 py-4 text-lg"
               >
                 Enroll Now - ${course.price} <ArrowRight className="ml-2" />
               </Link>
             </div>
 
-            <div className="lg:w-1/3 bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+            <div className="lg:w-1/3 bg-background p-8 rounded-xl border border-border shadow-sm">
               <h3 className="text-xl font-bold mb-4">Course Highlights</h3>
               <ul className="space-y-4">
                 {course.features.map((feature, index) => (
@@ -130,15 +130,15 @@ export default function CourseDetailPage() {
       </section>
 
       {/* Course Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 bg-background">
+        <div className="container">
           <h2 className="text-3xl font-bold mb-12 text-center">Student Success Metrics</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {course.stats.map((stat, index) => (
-              <div key={index} className="bg-gray-50 p-8 rounded-xl text-center border border-gray-200">
-                <div className="text-4xl font-bold text-blue-600 mb-3">{stat.value}</div>
-                <p className="text-gray-600">{stat.label}</p>
+              <div key={index} className="bg-muted p-8 rounded-xl text-center border border-border">
+                <div className="text-4xl font-bold text-primary mb-3">{stat.value}</div>
+                <p className="text-muted-foreground">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -146,11 +146,11 @@ export default function CourseDetailPage() {
       </section>
 
       {/* Profit Calculator Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 bg-muted">
+        <div className="container">
           <h2 className="text-3xl font-bold mb-8 text-center">Calculate Your Reselling Profit</h2>
           
-          <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm max-w-3xl mx-auto">
+          <div className="bg-background p-8 rounded-xl border border-border shadow-sm max-w-3xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
               <div>
                 <h3 className="text-xl font-bold mb-4">You resell {course.title} for</h3>
@@ -159,7 +159,7 @@ export default function CourseDetailPage() {
                   <input 
                     type="number" 
                     defaultValue="100"
-                    className="border border-gray-300 rounded-lg px-4 py-2 w-full text-xl"
+                    className="border border-border rounded-lg px-4 py-2 w-full text-xl"
                   />
                 </div>
               </div>
@@ -172,7 +172,7 @@ export default function CourseDetailPage() {
                   defaultValue="50"
                   className="w-full"
                 />
-                <div className="flex justify-between text-gray-600 mt-2">
+                <div className="flex justify-between text-muted-foreground mt-2">
                   <span>10</span>
                   <span>1000</span>
                 </div>
@@ -181,14 +181,14 @@ export default function CourseDetailPage() {
 
             <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
               <h3 className="text-xl font-bold mb-2 text-center">Estimated Monthly Profit</h3>
-              <div className="text-4xl font-bold text-blue-600 text-center mb-2">$9,950</div>
-              <p className="text-gray-600 text-center">Your profit potential with this course</p>
+              <div className="text-4xl font-bold text-primary text-center mb-2">$9,950</div>
+              <p className="text-muted-foreground text-center">Your profit potential with this course</p>
             </div>
 
             <div className="mt-8 text-center">
               <Link
                 href={`/signup?course=${course.id}`}
-                className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium text-white text-lg"
+                className="btn-theme px-8 py-4 text-lg"
               >
                 Claim Your Profit Potential <ArrowRight className="ml-2" />
               </Link>
@@ -198,15 +198,15 @@ export default function CourseDetailPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 bg-background">
+        <div className="container">
           <h2 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {course.faqs.map((faq, index) => (
-              <div key={index} className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+              <div key={index} className="bg-muted p-6 rounded-lg border border-border">
                 <h3 className="text-lg font-bold mb-2">{faq.question}</h3>
-                <p className="text-gray-600">{faq.answer}</p>
+                <p className="text-muted-foreground">{faq.answer}</p>
               </div>
             ))}
           </div>
@@ -214,17 +214,17 @@ export default function CourseDetailPage() {
       </section>
 
       {/* Blue Footer */}
-      <footer className="bg-blue-600 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer className="bg-primary text-primary-foreground py-12">
+        <div className="container">
           <div className="text-center">
             <h3 className="text-2xl font-bold mb-6">Ready to Start Your Course Business?</h3>
             <Link 
               href={`/signup?course=${course.id}`}
-              className="inline-block px-8 py-4 bg-white text-blue-600 hover:bg-gray-100 rounded-lg font-medium text-lg"
+              className="inline-block px-8 py-4 bg-background text-primary hover:bg-accent rounded-lg font-medium text-lg"
             >
               Enroll Now
             </Link>
-            <div className="mt-8 text-blue-100 text-sm">
+            <div className="mt-8 text-primary-foreground/80 text-sm">
               © {new Date().getFullYear()} Reskil. All rights reserved.
             </div>
           </div>

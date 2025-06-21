@@ -3,13 +3,14 @@
 @tailwind utilities;
 
 :root {
+  /* Base theme (default) */
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
   --card: 0 0% 100%;
   --card-foreground: 222.2 84% 4.9%;
   --popover: 0 0% 100%;
   --popover-foreground: 222.2 84% 4.9%;
-  --primary: 221.2 83.2% 53.3%;
+  --primary: 221.2 83.2% 53.3%; /* Default blue */
   --primary-foreground: 210 40% 98%;
   --secondary: 210 40% 96%;
   --secondary-foreground: 222.2 84% 4.9%;
@@ -23,6 +24,51 @@
   --input: 214.3 31.8% 91.4%;
   --ring: 221.2 83.2% 53.3%;
   --radius: 8px;
+}
+
+/* E-commerce Theme (Green) */
+.theme-ecom {
+  --primary: 142.1 76.2% 36.3%;
+  --primary-foreground: 144.9 80.4% 10%;
+  --accent: 142.1 70.6% 45.3%;
+  --accent-foreground: 144.9 80.4% 10%;
+  --ring: 142.1 76.2% 36.3%;
+}
+
+/* Social Media Marketing Theme (Purple) */
+.theme-smma {
+  --primary: 262.1 83.3% 57.8%;
+  --primary-foreground: 210 40% 98%;
+  --accent: 263.4 70% 50.4%;
+  --accent-foreground: 210 40% 98%;
+  --ring: 262.1 83.3% 57.8%;
+}
+
+/* FBA Theme (Orange) */
+.theme-fba {
+  --primary: 24.6 95% 53.1%;
+  --primary-foreground: 60 9.1% 97.8%;
+  --accent: 20.5 90.2% 48.2%;
+  --accent-foreground: 60 9.1% 97.8%;
+  --ring: 24.6 95% 53.1%;
+}
+
+/* Crypto Theme (Teal) */
+.theme-crypto {
+  --primary: 173.4 80.4% 40%;
+  --primary-foreground: 173 72% 13%;
+  --accent: 172.5 66% 50.4%;
+  --accent-foreground: 173 72% 13%;
+  --ring: 173.4 80.4% 40%;
+}
+
+/* AI Theme (Fuchsia) */
+.theme-ai {
+  --primary: 292.2 84.1% 60.8%;
+  --primary-foreground: 210 20% 98%;
+  --accent: 291.7 85.1% 50.4%;
+  --accent-foreground: 210 20% 98%;
+  --ring: 292.2 84.1% 60.8%;
 }
 
 @layer base {
@@ -55,34 +101,34 @@
 
   /* Custom styling for range input track */
   input[type="range"]::-webkit-slider-runnable-track {
-    background: linear-gradient(to right, #3B82F6 var(--range-progress, 0%), #E0F2FE var(--range-progress, 0%));
-    border-radius: 9999px; /* Full rounded corners */
-    height: 8px; /* Thickness of the track */
+    background: linear-gradient(to right, hsl(var(--primary)) var(--range-progress, 0%), #E0F2FE var(--range-progress, 0%));
+    border-radius: 9999px;
+    height: 8px;
   }
 
   input[type="range"]::-moz-range-track {
-    background: linear-gradient(to right, #3B82F6 var(--range-progress, 0%), #E0F2FE var(--range-progress, 0%));
+    background: linear-gradient(to right, hsl(var(--primary)) var(--range-progress, 0%), #E0F2FE var(--range-progress, 0%));
     border-radius: 9999px;
     height: 8px;
   }
 
   input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Remove default thumb style */
+    -webkit-appearance: none;
     appearance: none;
-    width: 20px; /* Size of the thumb */
+    width: 20px;
     height: 20px;
-    background-color: #2563EB; /* Color of the thumb */
-    border: 2px solid #fff; /* White border around thumb */
-    border-radius: 50%; /* Make it circular */
+    background-color: hsl(var(--primary));
+    border: 2px solid #fff;
+    border-radius: 50%;
     cursor: pointer;
-    margin-top: -6px; /* Adjust thumb vertical position */
+    margin-top: -6px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   input[type="range"]::-moz-range-thumb {
     width: 20px;
     height: 20px;
-    background-color: #2563EB;
+    background-color: hsl(var(--primary));
     border: 2px solid #fff;
     border-radius: 50%;
     cursor: pointer;
@@ -95,21 +141,21 @@
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
-  /* Consistent button styles */
-  .btn-base {
-    @apply inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
-  }
-
-  .btn-primary {
-    @apply btn-base bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:bg-blue-800;
-  }
-
-  .btn-secondary {
-    @apply btn-base bg-gray-100 text-gray-900 hover:bg-gray-200 hover:shadow-md;
-  }
-
-  .btn-outline {
-    @apply btn-base border border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 text-gray-700 hover:shadow-md;
+  /* Dynamic button that adapts to theme */
+  .btn-theme {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    &:hover {
+      background-color: hsl(var(--primary) / 0.9);
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    &:active {
+      background-color: hsl(var(--primary) / 0.8);
+    }
+    &:focus-visible {
+      outline-color: hsl(var(--primary));
+    }
   }
 
   /* Mobile responsive fixes */
@@ -159,22 +205,21 @@
 
   .animate-fade-in-up {
     animation: fadeInUp 0.6s ease-out forwards;
-    opacity: 0; /* Hidden by default */
+    opacity: 0;
   }
   .animate-fade-in-up.delay-100 { animation-delay: 0.1s; }
   .animate-fade-in-up.delay-200 { animation-delay: 0.2s; }
   .animate-fade-in-up.delay-300 { animation-delay: 0.3s; }
   .animate-fade-in-up.delay-400 { animation-delay: 0.4s; }
 
-
   .animate-slide-down {
     animation: slideDown 0.3s ease-out forwards;
   }
 
-  /* Responsive styles for font sizes and spacing for better mobile experience */
+  /* Responsive styles for font sizes and spacing */
   @media (max-width: 768px) {
     .text-6xl {
-      font-size: 3.5rem; /* Adjust for smaller screens */
+      font-size: 3.5rem;
     }
     .text-5xl {
       font-size: 3rem;
