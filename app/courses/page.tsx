@@ -1,9 +1,10 @@
 // app/courses/page.tsx
 "use client";
 
-import { CheckCircle, ArrowRight, Users, Clock } from "lucide-react";
+import { ArrowRight, Users, Clock } from "lucide-react";
 import Link from "next/link";
 import Head from 'next/head';
+import Image from 'next/image';
 
 export default function CoursesPage() {
   const courses = [
@@ -13,8 +14,8 @@ export default function CoursesPage() {
       category: "Dropshipping Course",
       description: "60+ Hours of Content",
       learners: "40 Learners & Resellers",
-      icon: "ECOM",
-      color: "bg-blue-100 text-blue-800"
+      icon: "/products/ecom.png",
+      alt: "ECOM PRODIGY"
     },
     {
       id: "agency-blueprint",
@@ -22,8 +23,8 @@ export default function CoursesPage() {
       category: "SMMA Course",
       description: "45 Hours of Content",
       learners: "12 Learners & Resellers",
-      icon: "AGENCY",
-      color: "bg-purple-100 text-purple-800"
+      icon: "/products/blueprint.png",
+      alt: "AGENCY BLUEPRINT"
     },
     {
       id: "dropship-pro",
@@ -31,8 +32,8 @@ export default function CoursesPage() {
       category: "Amazon FBA Course",
       description: "61 Hours of Content",
       learners: "55 Learners & Resellers",
-      icon: "DROPSHIP",
-      color: "bg-green-100 text-green-800"
+      icon: "/products/amazon.png",
+      alt: "AMAZON DROPSHIP PRO"
     },
     {
       id: "six-figure-closer",
@@ -40,8 +41,8 @@ export default function CoursesPage() {
       category: "Remote Closing Course",
       description: "41 Hours of Content",
       learners: "7 Learners & Resellers",
-      icon: "SIX-FIGURE",
-      color: "bg-red-100 text-red-800"
+      icon: "/products/sixfigure.png",
+      alt: "SIX FIGURE CLOSER"
     },
     {
       id: "entrepreneur-academy",
@@ -49,8 +50,8 @@ export default function CoursesPage() {
       category: "Done-For-You Community",
       description: "Pre-Built Community",
       learners: "200+ Member Community",
-      icon: "ENTREPRENEURS",
-      color: "bg-yellow-100 text-yellow-800"
+      icon: "/products/academy.png",
+      alt: "ENTREPRENEURS ACADEMY"
     },
     {
       id: "ghost-creator",
@@ -58,8 +59,35 @@ export default function CoursesPage() {
       category: "Youtube Automation Course",
       description: "71 Hours of Content",
       learners: "75 Learners & Resellers",
-      icon: "GHOST",
-      color: "bg-indigo-100 text-indigo-800"
+      icon: "/products/youtube.png",
+      alt: "GHOST CREATOR"
+    },
+    {
+      id: "market-mastery",
+      title: "Market Mastery",
+      category: "Day Trading Course",
+      description: "71 Hours of Content",
+      learners: "30 Learners & Resellers",
+      icon: "/products/market.png",
+      alt: "MARKET MASTERY"
+    },
+    {
+      id: "copywriting-catalyst",
+      title: "Copywriting Catalyst",
+      category: "Copywriting Course",
+      description: "48 Hours of Content",
+      learners: "22 Learners & Resellers",
+      icon: "/products/copywriting.png",
+      alt: "COPYWRITING CATALYST"
+    },
+    {
+      id: "money-gram",
+      title: "Money Gram",
+      category: "Instagram Theme Page Course",
+      description: "52 Hours of Content",
+      learners: "20 Learners & Resellers",
+      icon: "/products/moneygram.png",
+      alt: "MONEY GRAM"
     }
   ];
 
@@ -116,8 +144,14 @@ export default function CoursesPage() {
             {courses.map((course) => (
               <div key={course.id} className="bg-background border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
                 <div className="flex items-center justify-between mb-4">
-                  <div className={`${course.color} w-12 h-12 rounded-lg flex items-center justify-center font-bold`}>
-                    {course.icon}
+                  <div className="w-12 h-12 rounded-lg flex items-center justify-center overflow-hidden">
+                    <Image 
+                      src={course.icon}
+                      alt={course.alt}
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
                   </div>
                   <div className="text-right">
                     <span className="text-xs text-muted-foreground">Your Company Products</span>

@@ -786,7 +786,7 @@ export default function LandingPage() {
             <div>
               <h3 className="text-white text-lg font-bold mb-6">Product</h3>
               <ul className="space-y-4">
-                {['Features', 'Courses', 'Pricing', 'Testimonials'].map((item) => (
+                {['Features', 'Courses', 'Pricing'].map((item) => (
                   <li key={item}>
                     <a href="#" className="hover:text-white transition-colors duration-200">{item}</a>
                   </li>
@@ -796,7 +796,7 @@ export default function LandingPage() {
             <div>
               <h3 className="text-white text-lg font-bold mb-6">Resources</h3>
               <ul className="space-y-4">
-                {['Blog', 'Help Center', 'Tutorials', 'Community'].map((item) => (
+                {['Help Center', 'Tutorials', 'Community'].map((item) => (
                   <li key={item}>
                     <a href="#" className="hover:text-white transition-colors duration-200">{item}</a>
                   </li>
@@ -806,7 +806,7 @@ export default function LandingPage() {
             <div>
               <h3 className="text-white text-lg font-bold mb-6">Company</h3>
               <ul className="space-y-4">
-                {['About', 'Careers', 'Contact', 'Press'].map((item) => (
+                {['About', 'Careers', 'Contact'].map((item) => (
                   <li key={item}>
                     <a href="#" className="hover:text-white transition-colors duration-200">{item}</a>
                   </li>
@@ -832,10 +832,10 @@ export default function LandingPage() {
             </div>
             
             <div className="flex space-x-6 mb-6 md:mb-0">
-              {['Twitter', 'Facebook', 'Instagram', 'LinkedIn', 'YouTube'].map((social) => (
+              {['Tiktok', 'Instagram', 'X', 'YouTube'].map((social) => (
                 <a 
                   key={social} 
-                  href="#" 
+                  href="reskil.club" 
                   className="text-gray-400 hover:text-white transition-colors duration-200"
                   aria-label={social}
                 >
