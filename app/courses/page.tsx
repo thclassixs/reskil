@@ -4,7 +4,6 @@
 import { ArrowRight, Users, Clock } from "lucide-react";
 import Link from "next/link";
 import Head from 'next/head';
-import Image from 'next/image';
 
 export default function CoursesPage() {
   const courses = [
@@ -14,7 +13,7 @@ export default function CoursesPage() {
       category: "Dropshipping Course",
       description: "60+ Hours of Content",
       learners: "40 Learners & Resellers",
-      icon: "/products/ecom.png",
+      icon: "/images/ecom.webp",
       alt: "ECOM PRODIGY"
     },
     {
@@ -23,7 +22,7 @@ export default function CoursesPage() {
       category: "SMMA Course",
       description: "45 Hours of Content",
       learners: "12 Learners & Resellers",
-      icon: "/products/blueprint.png",
+      icon: "/images/blueprint.webp",
       alt: "AGENCY BLUEPRINT"
     },
     {
@@ -32,7 +31,7 @@ export default function CoursesPage() {
       category: "Amazon FBA Course",
       description: "61 Hours of Content",
       learners: "55 Learners & Resellers",
-      icon: "/products/amazon.png",
+      icon: "/images/amazon.webp",
       alt: "AMAZON DROPSHIP PRO"
     },
     {
@@ -41,7 +40,7 @@ export default function CoursesPage() {
       category: "Remote Closing Course",
       description: "41 Hours of Content",
       learners: "7 Learners & Resellers",
-      icon: "/products/sixfigure.png",
+      icon: "/images/sixfigure.webp",
       alt: "SIX FIGURE CLOSER"
     },
     {
@@ -50,7 +49,7 @@ export default function CoursesPage() {
       category: "Done-For-You Community",
       description: "Pre-Built Community",
       learners: "200+ Member Community",
-      icon: "/products/academy.png",
+      icon: "/images/academy.webp",
       alt: "ENTREPRENEURS ACADEMY"
     },
     {
@@ -59,7 +58,7 @@ export default function CoursesPage() {
       category: "Youtube Automation Course",
       description: "71 Hours of Content",
       learners: "75 Learners & Resellers",
-      icon: "/products/youtube.png",
+      icon: "/images/youtube.webp",
       alt: "GHOST CREATOR"
     },
     {
@@ -68,7 +67,7 @@ export default function CoursesPage() {
       category: "Day Trading Course",
       description: "71 Hours of Content",
       learners: "30 Learners & Resellers",
-      icon: "/products/market.png",
+      icon: "/images/market.webp",
       alt: "MARKET MASTERY"
     },
     {
@@ -77,7 +76,7 @@ export default function CoursesPage() {
       category: "Copywriting Course",
       description: "48 Hours of Content",
       learners: "22 Learners & Resellers",
-      icon: "/products/copywriting.png",
+      icon: "/images/copywriting.webp",
       alt: "COPYWRITING CATALYST"
     },
     {
@@ -86,7 +85,7 @@ export default function CoursesPage() {
       category: "Instagram Theme Page Course",
       description: "52 Hours of Content",
       learners: "20 Learners & Resellers",
-      icon: "/products/moneygram.png",
+      icon: "/images/moneygram.webp",
       alt: "MONEY GRAM"
     }
   ];
@@ -144,15 +143,11 @@ export default function CoursesPage() {
             {courses.map((course) => (
               <div key={course.id} className="bg-background border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-lg flex items-center justify-center overflow-hidden">
-                    <Image 
-                      src={course.icon}
-                      alt={course.alt}
-                      width={48}
-                      height={48}
-                      className="object-contain"
-                    />
-                  </div>
+                  <div 
+                    className="w-12 h-12 rounded-lg bg-cover bg-center"
+                    style={{ backgroundImage: `url(${course.icon})` }}
+                    aria-label={course.alt}
+                  />
                   <div className="text-right">
                     <span className="text-xs text-muted-foreground">Your Company Products</span>
                   </div>
